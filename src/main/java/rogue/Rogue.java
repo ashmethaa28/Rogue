@@ -27,9 +27,11 @@ public class Rogue{
 
     public void setSymbols(String filename){
         
+        JSONParser parser = new JSONParser();
+
         try {
 
-            Object objSymbols = JSONParser.parse(new FileReader(filename));
+            Object objSymbols = parser.parse(new FileReader(filename));
             JSONObject symbolsJSON = (JSONObject) objSymbols;
             JSONArray symbols = (JSONArray) symbolsJSON.get("symbols");
         
@@ -62,9 +64,11 @@ public class Rogue{
 
     public void createRooms(String filename){
 
+    	JSONParser parser = new JSONParser();
+
         try {
 
-            Object objRoom = JSONParser.parse(new FileReader(filename));
+            Object objRoom = parser.parse(new FileReader(filename));
             JSONObject roomJSON = (JSONObject) objRoom;//there should be more to this??
         
         } catch(FileNotFoundException e) {

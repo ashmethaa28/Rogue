@@ -14,9 +14,7 @@ public class Item  {
 
     //Constructors
     public Item() {
-        setId(null);
-        setName(null);
-        setType(null);
+
     }
 
     public Item(int id, String name, String type, Point xyLocation) {
@@ -39,7 +37,6 @@ public class Item  {
         itemId = id;
     }
 
-s
     public String getName() {
         return itemName;
     }

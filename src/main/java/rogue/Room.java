@@ -14,7 +14,7 @@ public class Room  {
   private int roomHeight;
   private int roomId;
   private ArrayList<Item> items = new ArrayList<>();
-  private HashMap<String, Integer> roomDoors = new Hashmap<>();
+//  private HashMap<String, Integer> roomDoors = new Hashmap<>();
   private Player player; 
 
     // Default constructor
