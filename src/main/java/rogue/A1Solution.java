@@ -31,11 +31,12 @@ public class A1Solution{
 
             Object obj = parser.parse(new FileReader(configurationFileLocation));
             JSONObject configurationJSON = (JSONObject) obj;
-            String roomFile = (String) configurationJSON.get("Rooms");
-            String symbolsFile = (String) configurationJSON.get("Symbols");
+            String roomFile = configurationJSON.get("Rooms").toString();
+            String symbolsFile = configurationJSON.get("Symbols").toString();
 
             // Extract the Rooms value from the file to get the file location for rooms
             Rogue game = new Rogue();
+
             game.createRooms(roomFile);
 
             // Extract the Symbols value from the file to get the file location for symbols-map
@@ -56,8 +57,7 @@ public class A1Solution{
         }
 
 // instantiate a new Rogue object and call methods to do the required things
- 
-        
+
     }
 
 

@@ -7,11 +7,13 @@ import java.awt.Point;
 public class Player {
 
     private String playerName;
-
+    private Room room;
+    private Character ch;
+    private Point p;
 
     // Default constructor
     public Player() {
-        setName(null);
+        setName("Unknown");
     }
 
 
@@ -30,23 +32,33 @@ public class Player {
     }
 
     public Point getXyLocation() {
-        return null;
+        return p;
 
     }
 
 
     public void setXyLocation(Point newXyLocation) {
-
+        p = newXyLocation;
     }
 
 
     public Room getCurrentRoom() {
-        return null;
+        return room;
 
     }
 
 
     public void setCurrentRoom(Room newRoom) {
+        room = newRoom;
+    }
 
+    public Character getDisplayCharacter() {
+        return ch;
+        
+    }
+
+
+    public void setDisplayCharacter(Character newDisplayCharacter) {
+        ch = newDisplayCharacter;   
     }
 }

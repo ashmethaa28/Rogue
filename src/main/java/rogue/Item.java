@@ -9,8 +9,10 @@ public class Item  {
     private int itemId;
     private String itemName;
     private String itemType;
-    private Room room;
+    private Room room = new Room();
     private String description;
+    private Character ch;
+    private Point p;
 
     //Constructors
     public Item() {
@@ -59,13 +61,13 @@ public class Item  {
     
 
     public Character getDisplayCharacter() {
-        return null;
+        return ch;
         
     }
 
 
     public void setDisplayCharacter(Character newDisplayCharacter) {
-           
+        ch = newDisplayCharacter;
     }
 
 
@@ -80,13 +82,13 @@ public class Item  {
 
 
     public Point getXyLocation() {
-        return null;
+        return p;
      
     }
 
     
     public void setXyLocation(Point newXyLocation) {
-        
+        p = newXyLocation;
     }
 
 

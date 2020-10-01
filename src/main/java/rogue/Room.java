@@ -1,6 +1,7 @@
 package rogue;
 import java.util.ArrayList; 
 import java.util.Map;
+import java.util.HashMap;
 import java.awt.Point;
 
 
@@ -13,9 +14,10 @@ public class Room  {
   private int roomWidth;
   private int roomHeight;
   private int roomId;
-  private ArrayList<Item> items = new ArrayList<>();
-//  private HashMap<String, Integer> roomDoors = new Hashmap<>();
+  private ArrayList<Item> itemList = new ArrayList();
+  private Map<String, Integer> roomDoors = new HashMap();
   private Player player; 
+  private Character ch;
 
     // Default constructor
   public Room() {
@@ -26,7 +28,7 @@ public class Room  {
 
  
   public int getWidth() {
-    return 0;
+    return roomWidth;
   }
 
  
@@ -55,26 +57,26 @@ public class Room  {
 
 
   public ArrayList<Item> getRoomItems() {
-    return items;
+    return itemList;
   }
 
 
   public void setRoomItems(ArrayList<Item> newRoomItems) {
-    
+    itemList = newRoomItems;
   }
 
 
   public Player getPlayer() {
-    return null;
+    return player;
   }
 
 
   public void setPlayer(Player newPlayer) {
-
+    player = newPlayer;
   }
 
   public int getDoor(String direction){
-    return 0;
+    return roomDoors.get(direction);
   }
 
 /*
@@ -83,15 +85,23 @@ location is a number between 0 and the length of the wall
 */
 
   public void setDoor(String direction, int location){
-
+    roomDoors.put(direction, location);
   }
 
 
   public boolean isPlayerInRoom() {
-    return true; //random shit
+    return true; //random shit idk wtf to do here
+  }
+
+  public Character getDisplayCharacter() {
+    return ch;
+        
   }
 
 
+  public void setDisplayCharacter(Character newDisplayCharacter) {
+    ch = newDisplayCharacter;
+  }
 
 
    /**
@@ -101,4 +111,6 @@ location is a number between 0 and the length of the wall
    public String displayRoom() {
     return null; 
    }
+
+
 }
