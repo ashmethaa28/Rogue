@@ -32,7 +32,6 @@ public class Rogue{
         JSONParser parser = new JSONParser();
 
         try {
-
             Object symbolObj = parser.parse(new FileReader(filename));
             JSONObject symbolsJSON = (JSONObject) symbolObj;
 
@@ -41,23 +40,14 @@ public class Rogue{
  	          
  	          	String name = jsonSymbol.get("name").toString();
            		String symbols = jsonSymbol.get("symbol").toString();
-
         	}
-        
         } catch(FileNotFoundException e) {
-        
             e.printStackTrace();
-        
         } catch (IOException e) {
-        
             e.printStackTrace();
-        
         } catch (ParseException e) {
-        
             e.printStackTrace();
-        
         }
-
     }
 
     public ArrayList<Room> getRooms(){
@@ -74,9 +64,9 @@ public class Rogue{
 
     public void createRooms(String filename){
     	JSONParser parser = new JSONParser();
+    	int once = 0;
 
         try {
-
             Object objRoom = parser.parse(new FileReader(filename));
             JSONObject roomJSON = (JSONObject) objRoom;
 
@@ -88,17 +78,45 @@ public class Rogue{
             	gameRoom.setId(Integer.decode(room.get("id").toString()));
             	gameRoom.setHeight(Integer.decode(room.get("height").toString()));
             	gameRoom.setWidth(Integer.decode(room.get("width").toString()));
+            	if(room.get("start").toString() == "true"){
+            		gameRoom.setPlayerInRoom(true);
+            	} else {
+            		gameRoom.setPlayerInRoom(false);
+            	}
 
-            	for(Object lootObj : (JSONArray) room.get("loot")){
-            		JSONObject loot = (JSONObject)lootObj;
 
-            		gameItem = new Item();
+            	if(once == 0){
+    	        	for(Object lootObj : (JSONArray) room.get("loot")){
+	            		JSONObject loot = (JSONObject)lootObj;
 
-            		gameItem.setCurrentRoom(gameRoom);
+            			gameItem = new Item();
 
-            		if(loot != null){
-            			gameItem.setId(Integer.decode(loot.get("id").toString()));
+	            		gameItem.setCurrentRoom(gameRoom);
+
+            			int i = -1, x = -1, y = -1;
+
+            			if(loot != null){
+            				i = Integer.decode(loot.get("id").toString());
+            				x = Integer.decode(loot.get("x").toString());
+            				y = Integer.decode(loot.get("y").toString());
+            			
+     		       		}
+
+	            		Point p = new Point(x, y);
+
+	            		for(Object itemObj : (JSONArray) roomJSON.get("items")){
+		            		JSONObject item = (JSONObject)itemObj;
+
+        		    		if (i == Integer.decode(item.get("id").toString())){
+        		    			String name = item.get("name").toString();
+    	        				String type = item.get("type").toString();
+	            				gameItem = new Item(i, name, type, p);
+        	    		}
+		           		}
+
+            			itemList.add(gameItem);
             		}
+            		once++;
             	}
 
             	for(Object doorObj : (JSONArray) room.get("doors")){
@@ -111,39 +129,26 @@ public class Rogue{
 
             	roomList.add(gameRoom);
             }
-
-            for(Object itemObj : (JSONArray) roomJSON.get("items")){
-            	JSONObject item = (JSONObject)itemObj;
-
-            	gameItem = new Item();
-
-            	gameItem.setId(Integer.decode(item.get("id").toString()));
-            	gameItem.setName(item.get("name").toString());
-            	gameItem.setType(item.get("type").toString());
-
-            	itemList.add(gameItem);
-            }
-
-        
         } catch(FileNotFoundException e) {
-        
             e.printStackTrace();
-        
         } catch (IOException e) {
-        
             e.printStackTrace();
-        
         } catch (ParseException e) {
-        
             e.printStackTrace();
-        
         }
 
     }
 
     public String displayAll(){
         //creates a string that displays all the rooms in the dungeon
-        return null;
+        String display = "ROOM 1";
+
+        for(int i = 0 ; i < roomList.size() ; i++ ){
+        	display = display + (roomList.get(i)).displayRoom();
+        	display = display + "\nROOM " + i + "\n";
+        }
+
+        return display;
     }
 
 

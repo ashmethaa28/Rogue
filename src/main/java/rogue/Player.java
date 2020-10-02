@@ -14,6 +14,7 @@ public class Player {
     // Default constructor
     public Player() {
         setName("Unknown");
+        Point p = new Point(1, 1);
     }
 
 
@@ -33,7 +34,6 @@ public class Player {
 
     public Point getXyLocation() {
         return p;
-
     }
 
 
@@ -43,8 +43,7 @@ public class Player {
 
 
     public Room getCurrentRoom() {
-        return room;
-
+        return room; //need to get boolean for this
     }
 
 
@@ -53,8 +52,7 @@ public class Player {
     }
 
     public Character getDisplayCharacter() {
-        return ch;
-        
+        return ch; 
     }
 
 

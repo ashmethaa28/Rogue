@@ -18,6 +18,7 @@ public class Room  {
   private Map<String, Integer> roomDoors = new HashMap();
   private Player player; 
   private Character ch;
+  private boolean isPlayer;
 
     // Default constructor
   public Room() {
@@ -90,7 +91,7 @@ location is a number between 0 and the length of the wall
 
 
   public boolean isPlayerInRoom() {
-    return true; //random shit idk wtf to do here
+    return isPlayer; 
   }
 
   public Character getDisplayCharacter() {
@@ -109,8 +110,12 @@ location is a number between 0 and the length of the wall
     * @return (String) String representation of how the room looks
     */
    public String displayRoom() {
-    return null; 
+   	String display = "-";
+    return display; 
    }
 
+   public void setPlayerInRoom(boolean player){
+    isPlayer = player;
+   }
 
 }

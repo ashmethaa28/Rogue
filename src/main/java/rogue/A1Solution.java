@@ -27,37 +27,34 @@ public class A1Solution{
         
  // reading the input file locations using the configuration file
         JSONParser parser = new JSONParser();
-        try {
+        Rogue game = new Rogue();
 
+        try {
             Object obj = parser.parse(new FileReader(configurationFileLocation));
             JSONObject configurationJSON = (JSONObject) obj;
             String roomFile = configurationJSON.get("Rooms").toString();
             String symbolsFile = configurationJSON.get("Symbols").toString();
 
             // Extract the Rooms value from the file to get the file location for rooms
-            Rogue game = new Rogue();
-
             game.createRooms(roomFile);
 
             // Extract the Symbols value from the file to get the file location for symbols-map
             game.setSymbols(symbolsFile);
             
         } catch(FileNotFoundException e) {
-
             e.printStackTrace();
-        
         } catch (IOException e) {
-        
             e.printStackTrace();
-        
         } catch (ParseException e) {
-        
             e.printStackTrace();
-        
         }
 
 // instantiate a new Rogue object and call methods to do the required things
+        Player player = new Player();
+        game.setPlayer(player);
 
+        ArrayList<Room> roomList = new ArrayList();
+        roomList = game.getRooms();
     }
 
 

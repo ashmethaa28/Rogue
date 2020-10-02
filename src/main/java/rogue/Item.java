@@ -23,7 +23,7 @@ public class Item  {
         setId(id);
         setName(name);
         setType(type);
-        //xyLocation
+        setXyLocation(xyLocation);
     }
     
     // Getters and setters
