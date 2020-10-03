@@ -40,6 +40,18 @@ public class Rogue{
  	          
  	          	String name = jsonSymbol.get("name").toString();
            		String symbols = jsonSymbol.get("symbol").toString();
+
+           		if(name.equals("ITEM")){
+           			for(int i = 0 ; i < itemList.size() ; i++){
+           				(itemList.get(i)).setDisplayCharacter(symbols.charAt(0));
+           			}
+           		} else if (name.equals("PLAYER")){
+           			roguePlayer.setDisplayCharacter(symbols.charAt(0));
+           		} else if(name.equals("DOOR") || name.equals("FLOOR") || name.equals("NS_WALL") || name.equals("EW_WALL")){
+           			for(int i = 0 ; i < roomList.size() ; i++){
+           				(roomList.get(i)).setDisplayCharacter(symbols.charAt(0), name);
+           			}
+           		}
         	}
         } catch(FileNotFoundException e) {
             e.printStackTrace();
@@ -141,11 +153,11 @@ public class Rogue{
 
     public String displayAll(){
         //creates a string that displays all the rooms in the dungeon
-        String display = "ROOM 1";
+        String display = "";
 
         for(int i = 0 ; i < roomList.size() ; i++ ){
+        	display = display + "\nROOM " + (i + 1) + "\n";
         	display = display + (roomList.get(i)).displayRoom();
-        	display = display + "\nROOM " + i + "\n";
         }
 
         return display;

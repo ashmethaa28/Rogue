@@ -29,6 +29,9 @@ public class A1Solution{
         JSONParser parser = new JSONParser();
         Rogue game = new Rogue();
 
+        Player player = new Player();
+        game.setPlayer(player);
+
         try {
             Object obj = parser.parse(new FileReader(configurationFileLocation));
             JSONObject configurationJSON = (JSONObject) obj;
@@ -50,11 +53,15 @@ public class A1Solution{
         }
 
 // instantiate a new Rogue object and call methods to do the required things
-        Player player = new Player();
-        game.setPlayer(player);
 
         ArrayList<Room> roomList = new ArrayList();
         roomList = game.getRooms();
+
+        for(int i = 0 ; i < roomList.size() ; i ++){
+        	roomList.get(i).setPlayer(player);
+        }
+
+        System.out.println(game.displayAll());
     }
 
 
