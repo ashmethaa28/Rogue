@@ -23,7 +23,7 @@ public class A1Solution{
     // Hardcoded configuration file location/name
     String configurationFileLocation = "fileLocations.json";  //please don't change this for this version of the assignment
         
- // reading the input file locations using the configuration file
+    // reading the input file locations using the configuration file
     JSONParser parser = new JSONParser();
     Rogue game = new Rogue();
 
@@ -50,8 +50,7 @@ public class A1Solution{
         e.printStackTrace();
       }
 
-// instantiate a new Rogue object and call methods to do the required things
-
+      // instantiate a new Rogue object and call methods to do the required things
       ArrayList<Room> roomList = new ArrayList();
       roomList = game.getRooms();
 

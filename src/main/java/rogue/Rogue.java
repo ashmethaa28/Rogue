@@ -22,11 +22,19 @@ public class Rogue{
   private static Room gameRoom;
   private Item gameItem;
 
+/**
+ *@param thePlayer
+ *updates the player that is being used file
+ */
   public void setPlayer(Player thePlayer){
     roguePlayer = thePlayer;
   }
 
 
+/**
+ *@param filename
+ *opens up JSON file to extract information from
+ */
   public void setSymbols(String filename){
     JSONParser parser = new JSONParser();
 
@@ -52,21 +60,34 @@ public class Rogue{
   }
 
 
+/**
+ *@return (ArrayList<Room>) an ArrayList of Room objects that were created from the JSON file
+ */
   public ArrayList<Room> getRooms(){
     return roomList;
   }
 
 
+/**
+ *@return (ArrayList<Item>)an ArrayList of all the Item objects that were created from the JSON file
+ */
   public ArrayList<Item> getItems(){
     return itemList;
   }
 
 
+/**
+ *@return (Player) the Player object that is being used
+ */
   public Player getPlayer(){
     return roguePlayer;
   }
 
 
+/**
+ *@param filename
+ *opens JSON file to extract information from
+ */
   public void createRooms(String filename){
     int once = 0;
 
@@ -102,6 +123,9 @@ public class Rogue{
   }
 
 
+/**
+ *@return (String) a String with all the rooms stored in it
+ */
   public String displayAll(){
     //creates a string that displays all the rooms in the dungeon
     String display = "";
@@ -114,7 +138,12 @@ public class Rogue{
     return display;
   }
 
-    //my own code
+
+/**
+ *@param name
+ *@param symbols
+ *used information from JSON files and updates the display character value in Item.java, Room.java, and Player.java
+ */
   public void extractSymbols(String name, String symbols){
     if(name.equals("ITEM")){
       for(int i = 0 ; i < itemList.size() ; i++){
@@ -130,6 +159,11 @@ public class Rogue{
   }
 
 
+/**
+ *@param room
+ *@param roomJSON
+ *used information from JSON files and creates Item objects for each item in a room and updates the ArrayList of items
+ */
   public void extractRoomItems(JSONObject room, JSONObject roomJSON){
     for(Object lootObj : (JSONArray) room.get("loot")){
       JSONObject loot = (JSONObject)lootObj;
@@ -163,6 +197,10 @@ public class Rogue{
   }
 
 
+/**
+ *@param room
+ *used information from JSON files and updates the roomDoors in Room.java
+ */
   public void extractRoomDoor(JSONObject room){
     for(Object doorObj : (JSONArray) room.get("doors")){
       JSONObject door = (JSONObject)doorObj;
@@ -173,7 +211,10 @@ public class Rogue{
     }
   }
 
-
+/**
+ *@param room
+ *used information from JSON files and the features of the room
+ */
   public void extractRoom(JSONObject room){
     gameRoom = new Room();
 
@@ -183,8 +224,9 @@ public class Rogue{
 
     if(room.get("start").toString() == "true"){
       gameRoom.setPlayerInRoom(true);
+      roguePlayer.setCurrentRoom(gameRoom);
     } else {
-       gameRoom.setPlayerInRoom(false);
+      gameRoom.setPlayerInRoom(false);
     }
   }
 

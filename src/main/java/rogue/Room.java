@@ -26,55 +26,96 @@ public class Room  {
 
   }
 
-// Required getter and setters below 
+// Required getter and setters below
+
+/**
+ *@return (int) the width of the room
+ */
   public int getWidth() {
    	return roomWidth;
   }
 
- 
+/**
+ *@param newWidth
+ *updates the width of the room
+ */ 
   public void setWidth(int newWidth) {
     roomWidth = newWidth;
   }  
 
- 
+
+/**
+ *@return (int) the height of the room
+ */ 
   public int getHeight() {
     return roomHeight;
   }
 
 
+/**
+ *@param newHeight 
+ *updates the height of a room
+ */
   public void setHeight(int newHeight) {
     roomHeight = newHeight;
   }
 
+
+/**
+ *@return (int) the room id
+ */
   public int getId() {
     return roomId;
   }
 
 
+/**
+ *@param newId
+ *updates the id of the room
+ */
   public void setId(int newId) {
     roomId = newId;
   }
 
 
+/**
+ *@return (ArrayList<Item>) the ArrayList of Item objects in the room
+ */
   public ArrayList<Item> getRoomItems() {
    	return itemList;
   }
 
 
+/**
+ *@param newRoomItems
+ *updates the ArrayList of Item objects in the room
+ */
   public void setRoomItems(ArrayList<Item> newRoomItems) {
     itemList = newRoomItems;
   }
 
 
+/**
+ *@return (Player) a Player object
+ */
   public Player getPlayer() {
     return player;
   }
 
 
-  public void setPlayer(Player newPlayer) { //set in main
+/**
+ *@param NewPlayer
+ *updates the player in the room
+ */
+  public void setPlayer(Player newPlayer) {
     player = newPlayer;
   }
 
+
+/**
+ *@param direction
+ *@return (int) location of door a certain direction
+ */
   public int getDoor(String direction){
     try{
       return roomDoors.get(direction);
@@ -88,20 +129,28 @@ direction is one of NSEW
 location is a number between 0 and the length of the wall
 */
 
+/**
+ *@param direction
+ *@param location
+ *updates the HashMap for the doors
+ */
   public void setDoor(String direction, int location){
     roomDoors.put(direction, location);
   }
 
 
+/**
+ *@return (boolean) if player is in the room
+ */
   public boolean isPlayerInRoom() {
     return isPlayer; 
   }
 
 
-   /**
-    * Produces a string that can be printed to produce an ascii rendering of the room and all of its contents
-    * @return (String) String representation of how the room looks
-    */
+/**
+ *Produces a string that can be printed to produce an ascii rendering of the room and all of its contents
+ *@return (String) String representation of how the room looks
+ */
   public String displayRoom() {
     String display = "";
 
@@ -118,21 +167,38 @@ location is a number between 0 and the length of the wall
     return display;
   }
 
+
+/**
+ * @param player
+ * updates if player is in the room
+ */
   public void setPlayerInRoom(boolean player){
     isPlayer = player;
   }
 
-//i added these method
+
+/**
+ *@param symbol
+ *@return (Character) the Character value used to represent the symbol
+ */
   public Character getDisplayCharacter(String symbol) {
     return displayInfo.get(symbol);
   }
 
-
+/**
+ *@param symbol
+ *@param (Character) newDisplayCharacter
+ *updates the list of symbols and the Character value use to represent them
+ */
   public void setDisplayCharacter(Character newDisplayCharacter, String symbol) {
     displayInfo.put(symbol, newDisplayCharacter);
   }
 
 
+/**
+ *@param display
+ *@return (String) string with the floors and walls in the room
+ */
   public String displayRoomWallFloor(String display){
     for(int y = 0 ; y < getHeight() ; y++){
       for(int x = 0 ; x < getWidth() ; x++){
@@ -152,6 +218,10 @@ location is a number between 0 and the length of the wall
   }
 
 
+/**
+ *@param display
+ *@return (String) added the doors to the string
+ */
   public String displayRoomDoor(String display){
     if(getDoor("S") != -1){
       display = display.substring(0, (getWidth() + 1)*(getHeight() - 1) + getDoor("S")) + getDisplayCharacter("DOOR") + display.substring((getWidth() + 1)*(getHeight() - 1) + getDoor("S") + 1);
@@ -170,6 +240,10 @@ location is a number between 0 and the length of the wall
   }
 
 
+/**
+ *@param display
+ *@return (String) added the items to the string
+ */
   public String displayRoomItem(String display){
     int index;
     Point p;
@@ -181,6 +255,7 @@ location is a number between 0 and the length of the wall
       index = (getWidth() + 1) * (int)(p.getY()) + (int)(p.getX());
       display = display.substring(0, index) + itemDisplay.getDisplayCharacter() + display.substring(index + 1);
 
+      //updates the player location if an item is in the same location
       if(isPlayerInRoom() == true && p.getY() == player.getXyLocation().getY() && p.getX() == player.getXyLocation().getX()){
         if(p.getX() == (getWidth() - 2)){
           p = new Point((int)p.getX() - 1, (int)p.getY());
@@ -200,6 +275,10 @@ location is a number between 0 and the length of the wall
   }
 
 
+/**
+ *@param display
+ *@return (String) added player to the String
+ */
   public String displayPlayer(String display){
     int index;
     Point p; 
