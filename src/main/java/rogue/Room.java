@@ -26,11 +26,9 @@ public class Room  {
 
   }
 
-   // Required getter and setters below
-
- 
+// Required getter and setters below 
   public int getWidth() {
-    return roomWidth;
+   	return roomWidth;
   }
 
  
@@ -50,7 +48,7 @@ public class Room  {
 
   public int getId() {
     return roomId;
-   }
+  }
 
 
   public void setId(int newId) {
@@ -59,7 +57,7 @@ public class Room  {
 
 
   public ArrayList<Item> getRoomItems() {
-    return itemList;
+   	return itemList;
   }
 
 
@@ -78,16 +76,11 @@ public class Room  {
   }
 
   public int getDoor(String direction){
-  	// if(roomDoors.get(direction) != null){
-  	// 	return roomDoors.get(direction);
-  	// } else {
-  	// 	return -1;
-  	// }
-  	try{
-  		return roomDoors.get(direction);
-  	} catch(NullPointerException ex){
-  		return -1;
-  	}
+    try{
+      return roomDoors.get(direction);
+    } catch(NullPointerException e){
+      return -1;
+    }
   }
 
 /*
@@ -110,51 +103,18 @@ location is a number between 0 and the length of the wall
     * @return (String) String representation of how the room looks
     */
   public String displayRoom() {
-  	String display = "";
-  	Point p;
-  	int index;
+    String display = "";
 
-  	for(int y = 0 ; y < getHeight() ; y++){
-  		for(int x = 0 ; x < getWidth() ; x++){
-  			if(y == 0 || y == (getHeight() - 1)){
-  				display = display + getDisplayCharacter("NS_WALL");
-  			} else if(x == 0 || x == (getWidth() - 1)){
-  				display = display + getDisplayCharacter("EW_WALL");
-  			}
-  			else {
-  				display = display + getDisplayCharacter("FLOOR"); 
-  			}
-  		}
-  		display = display + "\n";
-  	}
-
-  	if(getDoor("S") != -1){
-  		display = display.substring(0, (getWidth() + 1)*(getHeight() - 1) + getDoor("S")) + getDisplayCharacter("DOOR") + display.substring((getWidth() + 1)*(getHeight() - 1) + getDoor("S") + 1);
-  	}
-   	if(getDoor("N") != -1){
-   		display = display.substring(0, getDoor("N")) + getDisplayCharacter("DOOR") + display.substring(getDoor("N") + 1);
-  	}
-  	if(getDoor("W") != -1){ //edit like tf is this
-  		display = display.substring(0, getWidth() * getDoor("W") + getDoor("W")) + getDisplayCharacter("DOOR") + display.substring(getWidth() * getDoor("W") + getDoor("W") + 1);
-  	}
-  	if(getDoor("E") != -1){ //edit like tf is this
-  		display = display.substring(0, getWidth() * (getDoor("E") + 1) + (getDoor("E") - 1)) + getDisplayCharacter("DOOR") + display.substring(getWidth() * (getDoor("E") + 1) + (getDoor("E") - 1)+ 1);
-  	}
-
-  	p = player.getXyLocation();
-  	index = getWidth() * (int)(p.getY()) + (int)(p.getX()) + (int)(p.getX());
-	if(isPlayerInRoom() == true){
-   		display = display.substring(0, index) + player.getDisplayCharacter() + display.substring(index + 1);
-  	}
-
+    display = displayRoomWallFloor(display);
   	
-  	for(int i = 0 ; i < itemList.size() ; i++){
-  		Item itemDisplay = itemList.get(i);
-  		p = itemDisplay.getXyLocation();
-  		index = getWidth() * (int)(p.getY()) + (int)(p.getX()) + (int)(p.getX());
-  		display = display.substring(0, index) + itemDisplay.getDisplayCharacter() + display.substring(index + 1);
-  	}
+    display = displayRoomDoor(display);
+
+    display = displayRoomItem(display);
   	
+    if(isPlayerInRoom() == true){
+      display = displayPlayer(display);
+    }
+
     return display;
   }
 
@@ -162,7 +122,7 @@ location is a number between 0 and the length of the wall
     isPlayer = player;
   }
 
-//i added this method
+//i added these method
   public Character getDisplayCharacter(String symbol) {
     return displayInfo.get(symbol);
   }
@@ -172,4 +132,83 @@ location is a number between 0 and the length of the wall
     displayInfo.put(symbol, newDisplayCharacter);
   }
 
+
+  public String displayRoomWallFloor(String display){
+    for(int y = 0 ; y < getHeight() ; y++){
+      for(int x = 0 ; x < getWidth() ; x++){
+        if(y == 0 || y == (getHeight() - 1)){
+          display = display + getDisplayCharacter("NS_WALL");
+        } else if(x == 0 || x == (getWidth() - 1)){
+          display = display + getDisplayCharacter("EW_WALL");
+        } else {
+          display = display + getDisplayCharacter("FLOOR"); 
+        }
+      }
+
+      display = display + "\n";
+    }
+
+    return display;
+  }
+
+
+  public String displayRoomDoor(String display){
+    if(getDoor("S") != -1){
+      display = display.substring(0, (getWidth() + 1)*(getHeight() - 1) + getDoor("S")) + getDisplayCharacter("DOOR") + display.substring((getWidth() + 1)*(getHeight() - 1) + getDoor("S") + 1);
+    }
+    if(getDoor("N") != -1){
+      display = display.substring(0, getDoor("N")) + getDisplayCharacter("DOOR") + display.substring(getDoor("N") + 1);
+    }
+    if(getDoor("W") != -1){
+      display = display.substring(0, getWidth() * getDoor("W") + getDoor("W")) + getDisplayCharacter("DOOR") + display.substring(getWidth() * getDoor("W") + getDoor("W") + 1);
+    }
+    if(getDoor("E") != -1){
+      display = display.substring(0, getWidth() * (getDoor("E") + 1) + (getDoor("E") - 1)) + getDisplayCharacter("DOOR") + display.substring(getWidth() * (getDoor("E") + 1) + (getDoor("E") - 1)+ 1);
+    }
+
+    return display;
+  }
+
+
+  public String displayRoomItem(String display){
+    int index;
+    Point p;
+
+    for(int i = 0 ; i < itemList.size() ; i++){
+      Item itemDisplay = itemList.get(i);
+
+      p = itemDisplay.getXyLocation();
+      index = (getWidth() + 1) * (int)(p.getY()) + (int)(p.getX());
+      display = display.substring(0, index) + itemDisplay.getDisplayCharacter() + display.substring(index + 1);
+
+      if(isPlayerInRoom() == true && p.getY() == player.getXyLocation().getY() && p.getX() == player.getXyLocation().getX()){
+        if(p.getX() == (getWidth() - 2)){
+          p = new Point((int)p.getX() - 1, (int)p.getY());
+        } else {
+          p = new Point((int)p.getX() + 1, (int)p.getY());
+        }
+        if(p.getY() == (getHeight() - 2)){
+          p = new Point((int)p.getX(), (int)p.getY() - 1);
+        } else {
+          p = new Point((int)p.getX(), (int)p.getY() + 1);
+        }
+        player.setXyLocation(p);
+        i = -1;
+        }
+    }
+    return display;
+  }
+
+
+  public String displayPlayer(String display){
+    int index;
+    Point p; 
+
+    p = player.getXyLocation();
+    index = (getWidth() + 1) * (int)(p.getY()) + (int)(p.getX());
+    
+    display = display.substring(0, index) + player.getDisplayCharacter() + display.substring(index + 1);
+
+    return display;
+  }
 }

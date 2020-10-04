@@ -6,99 +6,93 @@ import java.awt.Point;
  */
 public class Item  {
 
-    private int itemId;
-    private String itemName;
-    private String itemType;
-    private Room room = new Room();
-    private String description;
-    private Character ch;
-    private Point p;
+  private int itemId;
+  private String itemName;
+  private String itemType;
+  private Room room = new Room();
+  private String description;
+  private Character ch;
+  private Point p;
 
-    //Constructors
-    public Item() {
+  //Constructors
+  public Item() {
+  }
 
-    }
-
-    public Item(int id, String name, String type, Point xyLocation) {
-        setId(id);
-        setName(name);
-        setType(type);
-        setXyLocation(xyLocation);
-    }
+  public Item(int id, String name, String type, Point xyLocation) {
+    setId(id);
+    setName(name);
+    setType(type);
+    setXyLocation(xyLocation);
+  }
     
-    // Getters and setters
+// Getters and setters
 
 
-    public int getId() {
-        return itemId;
-       
-    }
+  public int getId() {
+    return itemId; 
+  }
+
+  public void setId(int id) {
+    itemId = id;
+  }
+
+  public String getName() {
+    return itemName;
+  }
 
 
-    public void setId(int id) {
-        itemId = id;
-    }
-
-    public String getName() {
-        return itemName;
-    }
+  public void setName(String name) {
+    itemName = name;
+  }
 
 
-    public void setName(String name) {
-        itemName = name;
-    }
+  public String getType() {
+    return itemType;
+  }
 
 
-    public String getType() {
-        return itemType;
+  public void setType(String type) {
+    itemType = type;
+  }
 
-    }
-
-
-    public void setType(String type) {
-        itemType = type;
-    }
     
-
-    public Character getDisplayCharacter() {
-        return ch;
-        
-    }
+  public Character getDisplayCharacter() {
+    return ch;
+  }
 
 
-    public void setDisplayCharacter(Character newDisplayCharacter) {
-        ch = newDisplayCharacter;
-    }
+  public void setDisplayCharacter(Character newDisplayCharacter) {
+    ch = newDisplayCharacter;
+  }
 
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
 
-    public void setDescription(String newDescription) {
-        description = newDescription;
-    }
+  public void setDescription(String newDescription) {
+    description = newDescription;
+  }
 
 
-    public Point getXyLocation() {
-        return p;
+  public Point getXyLocation() {
+    return p;
      
-    }
+  }
 
-    
-    public void setXyLocation(Point newXyLocation) {
-        p = newXyLocation;
-    }
-
-
-    public Room getCurrentRoom() {
-        return room;
-        
-    }
+   
+  public void setXyLocation(Point newXyLocation) {
+    p = newXyLocation;
+  }
 
 
-    public void setCurrentRoom(Room newCurrentRoom) {
-        room = newCurrentRoom;
-    }
+  public Room getCurrentRoom() {
+    return room;
+  }
+
+
+  public void setCurrentRoom(Room newCurrentRoom) {
+    room = newCurrentRoom;
+  }
 }

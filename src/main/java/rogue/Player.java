@@ -6,58 +6,59 @@ import java.awt.Point;
  */
 public class Player {
 
-    private String playerName;
-    private Room room;
-    private Character ch;
-    private Point p;
+  private String playerName;
+  private Room room;
+  private Character ch;
+  private Point p;
 
-    // Default constructor
-    public Player() {
-        setName("Unknown");
-        Point p = new Point(5, 4);
-        setXyLocation(p);
-    }
-
-
-    public Player(String name) {
-        setName(name);
-    }
+  // Default constructor
+  public Player() {
+    setName("Unknown");
+    Point p = new Point(1, 1);
+    setXyLocation(p);
+  }
 
 
-    public String getName() {
-        return playerName;
-    }
+  public Player(String name) {
+    setName(name);
+  }
 
 
-    public void setName(String newName) {
-        playerName = newName;
-    }
-
-    public Point getXyLocation() {
-        return p;
-    }
+  public String getName() {
+    return playerName;
+  }
 
 
-    public void setXyLocation(Point newXyLocation) {
-        p = newXyLocation;
-    }
+  public void setName(String newName) {
+    playerName = newName;
+  }
+
+  public Point getXyLocation() {
+    return p;
+  }
 
 
-    public Room getCurrentRoom() {
-        return room; //need to get boolean for this
-    }
+  public void setXyLocation(Point newXyLocation) {
+    p = newXyLocation;
+  }
 
 
-    public void setCurrentRoom(Room newRoom) {
-        room = newRoom;
-    }
-
-    public Character getDisplayCharacter() {
-        return ch; 
-    }
+  public Room getCurrentRoom() {
+    return room; 
+  }
 
 
-    public void setDisplayCharacter(Character newDisplayCharacter) {
-        ch = newDisplayCharacter;   
-    }
+  public void setCurrentRoom(Room newRoom) {
+    room = newRoom;
+  }
+
+  public Character getDisplayCharacter() {
+    return ch; 
+  }
+
+
+  public void setDisplayCharacter(Character newDisplayCharacter) {
+    ch = newDisplayCharacter;   
+  }
+
 }
