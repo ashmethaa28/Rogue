@@ -14,7 +14,8 @@ public class Player {
     // Default constructor
     public Player() {
         setName("Unknown");
-        Point p = new Point(1, 1);
+        Point p = new Point(5, 4);
+        setXyLocation(p);
     }
 
 

@@ -123,12 +123,14 @@ public class Rogue{
         		    			String name = item.get("name").toString();
     	        				String type = item.get("type").toString();
 	            				gameItem = new Item(i, name, type, p);
-        	    		}
+	            				// gameRoom.setRoomItems(gameItem);
+        	    			}
 		           		}
 
             			itemList.add(gameItem);
             		}
             		once++;
+            		gameRoom.setRoomItems(itemList);
             	}
 
             	for(Object doorObj : (JSONArray) room.get("doors")){
