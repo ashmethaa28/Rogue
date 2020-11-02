@@ -59,6 +59,7 @@ public class A1Solution{
       }
 
       System.out.println(game.displayAll());
+
     }
 
 

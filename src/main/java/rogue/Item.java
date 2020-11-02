@@ -144,4 +144,5 @@ public class Item  {
   public void setCurrentRoom(Room newCurrentRoom) {
     room = newCurrentRoom;
   }
+
 }
