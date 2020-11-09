@@ -1,4 +1,5 @@
 package rogue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +8,6 @@ import java.util.Iterator;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,7 +49,6 @@ public class RogueParser {
      * @return (Map) Information about a room
      */
     public Map nextRoom() {
-
         if (roomIterator.hasNext()) {
             return roomIterator.next();
         } else {
@@ -204,7 +203,9 @@ public class RogueParser {
         for (int j = 0; j < doorArray.size(); j++) {
             JSONObject doorObj = (JSONObject) doorArray.get(j);
             String dir = String.valueOf(doorObj.get("dir"));
-            room.replace(dir, doorObj.get("id").toString());
+            room.replace(dir, doorObj.get("wall_pos").toString()); //MY CODE
+            String dircon = dir + "con"; //MY CODE
+            room.put(dircon, doorObj.get("con_room").toString()); //MY CODE
         }
 
         JSONArray lootArray = (JSONArray) roomJSON.get("loot");
@@ -259,6 +260,7 @@ public class RogueParser {
         item.put("id", itemsJSON.get("id").toString());
         item.put("name", itemsJSON.get("name").toString());
         item.put("type", itemsJSON.get("type").toString());
+        item.put("description", itemsJSON.get("description").toString());
 
         for (Map<String, String> itemLocation : itemLocations) {
             if (itemLocation.get("id").toString().equals(item.get("id").toString())) {

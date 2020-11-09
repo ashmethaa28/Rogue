@@ -5,18 +5,24 @@
             "height": 10,
             "width": 20,
             "doors": [{
-                "dir": "E",
-                "id": 5
+                "dir": "S",
+                "con_room": 2,
+                "wall_pos": 1
+            },
+            {
+                "dir": "N",
+                "con_room": 2,
+                "wall_pos": 4
             }],
             "loot": [{
                     "id": 1,
-                    "x": 18,
+                    "x": 3,
                     "y": 3
                 },
                 {
-                    "id": 1,
-                    "x": 3,
-                    "y": 5
+                    "id": 2,
+                    "x": 8,
+                    "y": 8
                 }
             ]
         },
@@ -26,31 +32,53 @@
             "height": 10,
             "width": 20,
             "doors": [{
-                    "dir": "W",
-                    "id": 5
+                    "dir": "N",
+                	"con_room": 1,
+                	"wall_pos": 3
                 },
                 {
                     "dir": "S",
-                    "id": 6
+               		"con_room": 1,
+                	"wall_pos": 5
                 }
             ],
-            "loot": []
+            "loot": [
+            {
+                    "id": 3,
+                    "x": 7,
+                    "y": 8
+                },
+            {
+                    "id": 35,
+                    "x": 3,
+                    "y": 6
+                },   
+            ]
         }
     ],
     "items": [{
             "id": 1,
             "name": "Health Potion",
-            "type": "consumable"
+            "type": "potion",
+            "description":"you feel better"
         },
         {
             "id": 2,
             "name": "Scroll of Fireball",
-            "type": "consumable"
+            "type": "scroll",
+            "description":"A 20 foot ball of flame hurtles away from you"
         },
         {
             "id": 3,
-            "name": "Iron Helmet",
-            "type": "equipment"
+            "name": "Mango",
+            "type": "food",
+            "description": "my that was a yummy mango!"
+        },
+        {
+            "id": 35,
+            "name": "6 gold",
+            "type": "gold",
+            "description": "you found 6 gold pieces"
         }
     ]
 }

@@ -1,10 +1,11 @@
 package rogue;
+
 import java.awt.Point;
 
 /**
- * A basic Item class; basic functionality for both consumables and equipment
+ * A basic Item class; basic functionality for both consumables and equipment.
  */
-public class Item  {
+public class Item {
 
   private int itemId;
   private String itemName;
@@ -14,26 +15,33 @@ public class Item  {
   private Character ch;
   private Point p;
 
-  //Constructors
+/**
+ * Default constructor.
+ */
   public Item() {
   }
 
+/**
+ *@param id - tells us id of items
+ *@param name - tells us the name of items
+ *@param type - discription of items
+ *@param xyLocation - tells us the location of item
+ *Sets the values of itemId, itemName, itemType, and p
+ */
   public Item(int id, String name, String type, Point xyLocation) {
     setId(id);
     setName(name);
     setType(type);
     setXyLocation(xyLocation);
   }
-    
-// Getters and setters
 
+// Getters and setters
 /**
  *@return (int) the id of the item
  */
   public int getId() {
-    return itemId; 
+    return itemId;
   }
-
 
 /**
  *@param id
@@ -43,14 +51,12 @@ public class Item  {
     itemId = id;
   }
 
-
 /**
  *@return (String) the name of the item
  */
   public String getName() {
     return itemName;
   }
-
 
 /**
  *@param name
@@ -60,14 +66,12 @@ public class Item  {
     itemName = name;
   }
 
-
 /**
  *@return (String) the item's type
  */
   public String getType() {
     return itemType;
   }
-
 
 /**
  *@param type
@@ -77,27 +81,24 @@ public class Item  {
     itemType = type;
   }
 
-
 /**
- *@return (Character) a Character value that is used to represent an item 
- */  
+ *@return (Character) a Character value that is used to represent an item
+ */
   public Character getDisplayCharacter() {
     return ch;
   }
 
-
 /**
  *@param newDisplayCharacter
- *updates the Character value that is used to represent an item  
- */  
+ *updates the Character value that is used to represent an item
+ */
   public void setDisplayCharacter(Character newDisplayCharacter) {
     ch = newDisplayCharacter;
   }
 
-
-/*
+/**
  *@return a description of the item
- */  
+ */
   public String getDescription() {
     return description;
   }
@@ -105,29 +106,25 @@ public class Item  {
 /**
  *@param newDescription
  *updates the description of an item
- */ 
+ */
   public void setDescription(String newDescription) {
     description = newDescription;
   }
-
 
 /**
  *@return (Point) the items's location
  */
   public Point getXyLocation() {
     return p;
-     
   }
-
 
 /**
  *@param newXyLocation
  *updates the new location of an item
- */   
+ */
   public void setXyLocation(Point newXyLocation) {
     p = newXyLocation;
   }
-
 
 /**
  *@return (Room) the current room in which the item is in
@@ -135,7 +132,6 @@ public class Item  {
   public Room getCurrentRoom() {
     return room;
   }
-
 
 /**
  *@param newCurrentRoom

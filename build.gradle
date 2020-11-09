@@ -5,8 +5,8 @@ plugins {
     id 'checkstyle'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 
 
@@ -58,5 +58,5 @@ test {
 }
 
 application {
-    mainClassName = "rogue.TextUI"
+    mainClassName = "rogue.WindowUI"
 }

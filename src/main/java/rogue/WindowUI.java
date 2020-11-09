@@ -12,6 +12,7 @@ import java.awt.Container;
 import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class WindowUI extends JFrame {
 
@@ -29,8 +30,8 @@ public class WindowUI extends JFrame {
 
 
 /**
-Constructor.
-**/
+ *Constructor.
+ */
 
     public WindowUI() {
         super();
@@ -65,12 +66,12 @@ Constructor.
         }
     }
 
-    /**
-Prints a string to the screen starting at the indicated column and row.
-@param toDisplay the string to be printed
-@param column the column in which to start the display
-@param row the row in which to start the display
-**/
+/**
+ *Prints a string to the screen starting at the indicated column and row.
+ *@param toDisplay the string to be printed
+ *@param column the column in which to start the display
+ *@param row the row in which to start the display
+ */
         public void putString(String toDisplay, int column, int row) {
 
             Terminal t = screen.getTerminal();
@@ -85,19 +86,19 @@ Prints a string to the screen starting at the indicated column and row.
         }
 
 /**
-Changes the message at the top of the screen for the user.
-@param msg the message to be displayed
-**/
+ *Changes the message at the top of the screen for the user.
+ *@param msg the message to be displayed
+ */
             public void setMessage(String msg) {
                 putString("                                                ", 1, 1);
                 putString(msg, startCol, msgRow);
             }
 
 /**
-Redraws the whole screen including the room and the message.
-@param message the message to be displayed at the top of the room
-@param room the room map to be drawn
-**/
+ *Redraws the whole screen including the room and the message.
+ *@param message the message to be displayed at the top of the room
+ *@param room the room map to be drawn
+ */
             public void draw(String message, String room) {
 
                 try {
@@ -110,45 +111,45 @@ Redraws the whole screen including the room and the message.
 
         }
 
+// /**
+//  *Obtains input from the user and returns it as a char.  Converts arrow
+//  *keys to the equivalent movement keys in rogue.
+//  *@return the ascii value of the key pressed by the user
+//  */
+//         public char getInput() {
+//             KeyStroke keyStroke = null;
+//             char returnChar;
+//             while (keyStroke == null) {
+//             try {
+//                 keyStroke = screen.pollInput();
+
+//             } catch (IOException e) {
+//                 e.printStackTrace();
+//             }
+
+//         }
+//          if (keyStroke.getKeyType() == KeyType.ArrowDown) {
+//             returnChar = Rogue.DOWN;  //constant defined in rogue
+//         } else if (keyStroke.getKeyType() == KeyType.ArrowUp) {
+//             returnChar = Rogue.UP;
+//         } else if (keyStroke.getKeyType() == KeyType.ArrowLeft) {
+//             returnChar = Rogue.LEFT;
+//         } else if (keyStroke.getKeyType() == KeyType.ArrowRight) {
+//             returnChar = Rogue.RIGHT;
+//         } else {
+//             returnChar = keyStroke.getCharacter();
+//         }
+//         return returnChar;
+//     }
+
 /**
-Obtains input from the user and returns it as a char.  Converts arrow
-keys to the equivalent movement keys in rogue.
-@return the ascii value of the key pressed by the user
-**/
-        public char getInput() {
-            KeyStroke keyStroke = null;
-            char returnChar;
-            while (keyStroke == null) {
-            try {
-                keyStroke = screen.pollInput();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-         if (keyStroke.getKeyType() == KeyType.ArrowDown) {
-            returnChar = Rogue.DOWN;  //constant defined in rogue
-        } else if (keyStroke.getKeyType() == KeyType.ArrowUp) {
-            returnChar = Rogue.UP;
-        } else if (keyStroke.getKeyType() == KeyType.ArrowLeft) {
-            returnChar = Rogue.LEFT;
-        } else if (keyStroke.getKeyType() == KeyType.ArrowRight) {
-            returnChar = Rogue.RIGHT;
-        } else {
-            returnChar = keyStroke.getCharacter();
-        }
-        return returnChar;
-    }
-
-/**
-The controller method for making the game logic work.
-@param args command line parameters
-**/
+ *The controller method for making the game logic work.
+ *@param args command line parameters
+ */
     public static void main(String[] args) {
 
-       char userInput = 'h';
-    String message;
+    // char userInput = 'h';
+    // String message;
     String configurationFileLocation = "fileLocations.json";
     //Parse the json files
     RogueParser parser = new RogueParser(configurationFileLocation);
@@ -157,25 +158,37 @@ The controller method for making the game logic work.
     // allocate memory for the game and set it up
     Rogue theGame = new Rogue(parser);
    //set up the initial game display
-    Player thePlayer = new Player("Judi");
+    // Player thePlayer = new Player("Judi");
+    Player thePlayer = new Player();
     theGame.setPlayer(thePlayer);
-    message = "Welcome to my Rogue game";
-    theGameUI.draw(message, theGame.getNextDisplay());
-    theGameUI.setVisible(true);
+    // message = "Welcome to my Rogue game";
+    theGame.createRooms(configurationFileLocation);
+    theGame.setSymbols(configurationFileLocation);
 
-    while (userInput != 'q') {
-    //get input from the user
-    userInput = theGameUI.getInput();
+    ArrayList<Room> roomList = new ArrayList();
+    roomList = theGame.getRooms();
 
-    //ask the game if the user can move there
-    try {
-        message = theGame.makeMove(userInput);
-        theGameUI.draw(message, theGame.getNextDisplay());
-    } catch (InvalidMoveException badMove) {
-        message = "I didn't understand what you meant, please enter a command";
-        theGameUI.setMessage(message);
+    for (int i = 0; i < roomList.size(); i++) {
+      roomList.get(i).setPlayer(thePlayer);
     }
-    }
+
+    System.out.println(theGame.displayAll());
+    // theGameUI.draw(message, theGame.getNextDisplay());
+    // theGameUI.setVisible(true);
+
+    // while (userInput != 'q') {
+    // //get input from the user
+    // userInput = theGameUI.getInput();
+
+    // //ask the game if the user can move there
+    // try {
+    //     message = theGame.makeMove(userInput);
+    //     theGameUI.draw(message, theGame.getNextDisplay());
+    // } catch (InvalidMoveException badMove) {
+    //     message = "I didn't understand what you meant, please enter a command";
+    //     theGameUI.setMessage(message);
+    // }
+    // }
 
 
     }
