@@ -22,10 +22,11 @@ public class Door {
  * @param roomId
  * Constructor.
  */
-  public Door(String direction, int location, int roomId) {
+  public Door(String direction, int location, int roomId, Room r) {
     setDirection(direction);
     setLocation(location);
     setConnectedRoomId(roomId);
+    connectRoom(r);
   }
 
 /**

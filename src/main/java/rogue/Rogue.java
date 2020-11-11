@@ -13,6 +13,10 @@ public class Rogue {
   // private Room gameRoom;
   // private Item gameItem;
   private RogueParser game;
+  static char DOWN = 's'; //something like private should be here
+  static char UP = 'w';
+  static char LEFT = 'a';
+  static char RIGHT = 'd';
 
 /**
  *@param theGame
@@ -81,37 +85,10 @@ public class Rogue {
   public void createRooms(String filename) {
     Map<String, String> roomMap = new HashMap();
     Map<String, String> itemMap = new HashMap();
+
     for (int i = 0; i <= game.getNumOfRooms(); i++) {
-      Room room = new Room();
       roomMap = game.nextRoom();
-
-      room.setWidth(Integer.decode(roomMap.get("width")));
-      room.setHeight(Integer.decode(roomMap.get("height")));
-      room.setId(Integer.decode(roomMap.get("id")));
-      if (roomMap.get("start") == "true") {
-        room.setPlayerInRoom(true);
-      } else {
-        room.setPlayerInRoom(false);
-      }
-
-      if (Integer.decode(roomMap.get("N")) != -1) {
-        Door door = new Door("N", Integer.decode(roomMap.get("N")), Integer.decode(roomMap.get("Ncon")));
-        room.addDoor(door);
-      }
-      if (Integer.decode(roomMap.get("S")) != -1) {
-        Door door = new Door("S", Integer.decode(roomMap.get("S")), Integer.decode(roomMap.get("Scon")));
-        room.addDoor(door);
-      }
-      if (Integer.decode(roomMap.get("W")) != -1) {
-        Door door = new Door("W", Integer.decode(roomMap.get("W")), Integer.decode(roomMap.get("Wcon")));
-        room.addDoor(door);
-      }
-      if (Integer.decode(roomMap.get("E")) != -1) {
-        Door door = new Door("E", Integer.decode(roomMap.get("E")), Integer.decode(roomMap.get("Econ")));
-        room.addDoor(door);
-      }
-
-      roomList.add(room);
+      addRoom(roomMap);
     }
 
     for (int n = 0; n <= game.getNumOfRooms(); n++) {
@@ -126,47 +103,276 @@ public class Rogue {
     }
 
     for (int i = 0; i <= game.getNumOfItems(); i++) {
-      Item item = new Item();
       itemMap = game.nextItem();
+      Item item = new Item();
       for (int n = 0; n <= game.getNumOfRooms(); n++) {
         try {
-          if (Integer.decode(itemMap.get("room")) == (roomList.get(n)).getId()) {
-            item.setId(Integer.decode(itemMap.get("id")));
-            item.setName(itemMap.get("name"));
-            item.setType(itemMap.get("type"));
-            item.setDescription(itemMap.get("description"));
-            item.setCurrentRoom(roomList.get(n));
+        if (Integer.decode(itemMap.get("room")) == (roomList.get(n)).getId()) {
+          addItem(itemMap);
+          item = itemList.get(i);
+          item.setCurrentRoom(roomList.get(n));
 
-            int x = Integer.decode(itemMap.get("x"));
-            int y = Integer.decode(itemMap.get("y"));
-            Point p = new Point(x, y);
+        try {
+          (roomList.get(n)).addItem(item);
+        } catch (ImpossiblePositionException e) {
+          int check = 1;
+          Point pTemp;
+          Point p;
+          while (check == 1) {
+            check = 0;
+            for (int a = 0; a < itemList.size(); a++) {
+              p = itemList.get(a).getXyLocation();
+              if (a != i){
+                if (p.getX() == item.getXyLocation().getX() && p.getY() == item.getXyLocation().getY()) {
+                  if (item.getXyLocation().getX() == ((roomList.get(n)).getWidth() - 2)) {
+                    pTemp = new Point((int)item.getXyLocation().getX() - 1, (int)item.getXyLocation().getY());
+                  } else {
+                    pTemp = new Point((int)item.getXyLocation().getX() + 1, (int)item.getXyLocation().getY());
+                  }
+                  if (item.getXyLocation().getY() == ((roomList.get(n)).getHeight() - 2)) {
+                    pTemp = new Point((int)item.getXyLocation().getX(), (int)item.getXyLocation().getY() - 1);
+                  } else {
+                    pTemp = new Point((int)item.getXyLocation().getX(), (int)item.getXyLocation().getY() + 1);
+                  }
+                  item.setXyLocation(pTemp);
+                  a = -1;
+                }
+              }
+            }
+
+            p = item.getXyLocation();
+            if ((roomList.get(n)).isPlayerInRoom() == true && p.getY() == (roomList.get(n)).getPlayer().getXyLocation().getY() && p.getX() == (roomList.get(n)).getPlayer().getXyLocation().getX()) {
+              if (p.getX() == ((roomList.get(n)).getWidth() - 2)) {
+                p = new Point((int)p.getX() - 1, (int)p.getY());
+              } else {
+                p = new Point((int)p.getX() + 1, (int)p.getY());
+              }
+              if (p.getY() == ((roomList.get(n)).getHeight() - 2)) {
+                p = new Point((int)p.getX(), (int)p.getY() - 1);
+              } else {
+              p = new Point((int)p.getX(), (int)p.getY() + 1);
+              }
+              (roomList.get(n)).getPlayer().setXyLocation(p);
+              check = 1;
+            }
+
+            p = item.getXyLocation();
+            if ((roomList.get(n)).getHeight() - 1 <= p.getY() || p.getY() <= 0) {
+              p = new Point((int)p.getX(), 1);
+              check = 1;
+            }
+            if ((roomList.get(n)).getWidth() - 1 <= p.getX() || p.getX() <= 0) {
+              p = new Point(1, (int)p.getY());
+              check = 1;
+            }
             item.setXyLocation(p);
-
-            (roomList.get(n)).addItem(item);
-            itemList.add(item);
-            //(roomList.get(n)).setRoomItems(itemList);
           }
-        } catch (NullPointerException e) {
+          try {
+            (roomList.get(n)).addItem(item);
+          } catch (ImpossiblePositionException ex) {
+          } catch (NoSuchItemException ex) {
+          }
+        } catch (NoSuchItemException e) {
+          // (roomList.get(n)).removeItem(item);
+        }
+      } 
+      } catch (NullPointerException ei) {
+      } 
+    }
+    }
+    for (int i = 0; i < roomList.size(); i++) {
+      try{
+        System.out.println(roomList.get(i).verifyRoom());
+      } catch (NotEnoughDoorsException e) {
+      	//ADD CODE MAYBE?
+      }
+    }
+  }
 
+
+// /**
+//  *@return (String) a String with all the rooms stored in it
+//  */
+//   public String displayAll() {
+//     //creates a string that displays all the rooms in the dungeon
+//     String display = "";
+
+//     for (int i = 0; i < roomList.size(); i++) {
+//       display = display + "\nROOM " + (i + 1) + "\n";
+//       display = display + (roomList.get(i)).displayRoom();
+//     }
+
+//     return display;
+//   }
+
+  public String makeMove(char input) throws InvalidMoveException {
+    for (int i = 0; i < roomList.size(); i++){
+      if (roomList.get(i).isPlayerInRoom()) {
+        Player player = roomList.get(i).getPlayer();
+        Point p;
+        if (input == 'w') {
+          p = new Point((int)player.getXyLocation().getX(), (int)player.getXyLocation().getY() - 1);
+          player.setXyLocation(p);
+          roomList.get(i).setPlayer(player);
+          try {
+            if (!(roomList.get(i).verifyRoom())) {
+              if(!(switchRooms(p, roomList.get(i).listDoor(), i))){
+                p = new Point((int)player.getXyLocation().getX(), (int)player.getXyLocation().getY() + 1);
+                player.setXyLocation(p);
+                roomList.get(i).setPlayer(player);
+                throw new InvalidMoveException();
+              } else {
+                removeItemInPosition(p, roomList.get(i).getRoomItems(), i);
+                return "Valid Move";
+              }
+            } else {
+              removeItemInPosition(p, roomList.get(i).getRoomItems(), i);
+              return "Valid Move";
+            }
+          } catch (NotEnoughDoorsException e) {
+          }
+        } else if (input == 's') {
+          p = new Point((int)player.getXyLocation().getX(), (int)player.getXyLocation().getY() + 1);
+          player.setXyLocation(p);
+          roomList.get(i).setPlayer(player);
+          try {
+            if (!(roomList.get(i).verifyRoom())) {
+              p = new Point((int)player.getXyLocation().getX(), (int)player.getXyLocation().getY() - 1);
+              player.setXyLocation(p);
+              roomList.get(i).setPlayer(player);
+              throw new InvalidMoveException();
+            } else {
+              removeItemInPosition(p, roomList.get(i).getRoomItems(), i);
+              return "Valid Move";
+            }
+          } catch (NotEnoughDoorsException e) {
+          }
+        } else if (input == 'd') {
+          p = new Point((int)player.getXyLocation().getX() + 1, (int)player.getXyLocation().getY());
+          player.setXyLocation(p);
+          roomList.get(i).setPlayer(player);
+          try {
+            if (!(roomList.get(i).verifyRoom())) {
+              p = new Point((int)player.getXyLocation().getX() - 1, (int)player.getXyLocation().getY());
+              player.setXyLocation(p);
+              roomList.get(i).setPlayer(player);
+              throw new InvalidMoveException();
+            } else {
+              removeItemInPosition(p, roomList.get(i).getRoomItems(), i);
+              return "Valid Move";
+            }
+          } catch (NotEnoughDoorsException e) {
+          }
+        } else if (input == 'a') {
+          p = new Point((int)player.getXyLocation().getX() - 1, (int)player.getXyLocation().getY());
+          player.setXyLocation(p);
+          roomList.get(i).setPlayer(player);
+          try {
+            if (!(roomList.get(i).verifyRoom())) {
+              p = new Point((int)player.getXyLocation().getX() + 1, (int)player.getXyLocation().getY());
+              player.setXyLocation(p);
+              roomList.get(i).setPlayer(player);
+              throw new InvalidMoveException();
+            } else {
+              removeItemInPosition(p, roomList.get(i).getRoomItems(), i);
+              return "Valid Move";
+            }
+          } catch (NotEnoughDoorsException e) {
+          }
         }
       }
     }
-
+    throw new InvalidMoveException();
   }
 
-/**
- *@return (String) a String with all the rooms stored in it
- */
-  public String displayAll() {
-    //creates a string that displays all the rooms in the dungeon
-    String display = "";
-
+  public String getNextDisplay() {
     for (int i = 0; i < roomList.size(); i++) {
-      display = display + "\nROOM " + (i + 1) + "\n";
-      display = display + (roomList.get(i)).displayRoom();
+      if (roomList.get(i).isPlayerInRoom()) {
+        return roomList.get(i).displayRoom();
+      }
+    }
+    return null;
+  }
+
+  public void addRoom(Map<String, String> toAdd) {
+    Room room = new Room();
+    room.setWidth(Integer.decode(toAdd.get("width")));
+    room.setHeight(Integer.decode(toAdd.get("height")));
+    room.setId(Integer.decode(toAdd.get("id")));
+    if (toAdd.get("start") == "true") {
+      room.setPlayerInRoom(true);
+      room.setPlayer(roguePlayer);
+    } else {
+      room.setPlayerInRoom(false);
+    }
+    if (Integer.decode(toAdd.get("N")) != -1) {
+      Door door = new Door("N", Integer.decode(toAdd.get("N")), Integer.decode(toAdd.get("Ncon")), room);
+      room.addDoor(door);
+    }
+    if (Integer.decode(toAdd.get("S")) != -1) {
+      Door door = new Door("S", Integer.decode(toAdd.get("S")), Integer.decode(toAdd.get("Scon")), room);
+      room.addDoor(door);
+    }
+    if (Integer.decode(toAdd.get("W")) != -1) {
+      Door door = new Door("W", Integer.decode(toAdd.get("W")), Integer.decode(toAdd.get("Wcon")), room);
+      room.addDoor(door);
+    }
+    if (Integer.decode(toAdd.get("E")) != -1) {
+      Door door = new Door("E", Integer.decode(toAdd.get("E")), Integer.decode(toAdd.get("Econ")),room);
+      room.addDoor(door);
     }
 
-    return display;
+    // room.settingItemListId(Integer.decode(roomMap.get("loot")));
+    // add MORE CODE FOR EXCEPTION
+    roomList.add(room);
+  }
+
+  public void addItem(Map<String, String> toAdd) {
+    Item item = new Item();
+    item.setId(Integer.decode(toAdd.get("id")));
+    item.setName(toAdd.get("name"));
+    item.setType(toAdd.get("type"));
+    item.setDescription(toAdd.get("description"));
+
+    int x = Integer.decode(toAdd.get("x"));
+    int y = Integer.decode(toAdd.get("y"));
+    Point p = new Point(x, y);
+    item.setXyLocation(p);
+
+    itemList.add(item);
+  }
+
+  public void removeItemInPosition(Point p, ArrayList<Item> itemTempList, int i){
+    for (int n = 0; n < itemTempList.size(); n++) {
+      if (p.getX() == itemTempList.get(n).getXyLocation().getX() && p.getY() == itemTempList.get(n).getXyLocation().getY()){
+        roomList.get(i).removeItem(itemTempList.get(n));
+      }
+    }
+  }
+
+  public boolean switchRooms(Point p, ArrayList<Door> doors, int i){
+    for (int n = 0; n < doors.size(); n++) {
+      if (p.getY() == 0 && doors.get(n).getDirection() == "N" && p.getX() == doors.get(n).getLocation()) {
+        roomList.get(i).setPlayerInRoom(false);
+        Room room = doors.get(n).getOtherRoom(roomList.get(i));
+        for(int y = 0; y < roomList.size(); y++){
+          if(roomList.get(y).getId() == room.getId()){
+            i = y;
+            roomList.get(i).setPlayerInRoom(true);
+          }
+        }
+        for (int y = 0; y < room.listDoor().size(); y++) {
+          if (roomList.get(i).listDoor().get(y).getDirection() == "S") {
+            p = new Point(roomList.get(i).listDoor().get(y).getLocation(), roomList.get(i).getHeight() - 2);
+            Player player = roomList.get(i).getPlayer();
+            player.setXyLocation(p);
+            roomList.get(i).setPlayer(player);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
 }

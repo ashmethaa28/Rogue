@@ -5,7 +5,8 @@ public class NotEnoughDoorsException extends Exception {
 /**
  *Default Constructor.
  */
-    public NotEnoughDoorsException() {
+  public NotEnoughDoorsException() {
 
-    }
+  }
+
 }

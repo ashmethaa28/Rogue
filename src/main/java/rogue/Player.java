@@ -9,7 +9,7 @@ public class Player {
   private String playerName;
   private Room room;
   private Character ch;
-  private Point p = new Point();
+  private Point p;
 
 /**
  * Default constructor.
@@ -17,7 +17,7 @@ public class Player {
   public Player() {
     setName("Unknown");
     Point newPoint = new Point(1, 1);
-    setXyLocation(p);
+    setXyLocation(newPoint);
   }
 
 
@@ -28,7 +28,7 @@ public class Player {
   public Player(String name) {
     setName(name);
     Point newPoint = new Point(1, 1);
-    setXyLocation(p);
+    setXyLocation(newPoint);
   }
 
 /**
