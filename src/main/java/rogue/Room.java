@@ -14,7 +14,6 @@ public class Room {
   private int roomHeight;
   private int roomId;
   private ArrayList<Item> itemList = new ArrayList();
-  private Map<String, Integer> roomDoors = new HashMap(); //might not be needed
   private ArrayList<Door> doorList = new ArrayList();
   private Player player;
   private Character ch;
@@ -39,7 +38,6 @@ public class Room {
   // public void settingItemListId(int id){
   //   itemListId.add(id);
   // }
-
   // public ArrayList<Integer> getItemListId(){
   //   return itemListId;
   // }
@@ -128,20 +126,6 @@ public class Room {
     return -1;
   }
 
-/*
-direction is one of NSEW
-location is a number between 0 and the length of the wall
-*/
-
-/**
- *@param direction - direction of door
- *@param location
- *updates the HashMap for the doors
- */
-  public void setDoor(String direction, int location) {
-    roomDoors.put(direction, location);
-  }
-
 /**
  *@return (boolean) if player is in the room
  */
@@ -195,12 +179,7 @@ location is a number between 0 and the length of the wall
     displayInfo.put(symbol, newDisplayCharacter);
   }
 
-
-/**
- *@param display - display of room
- *@return (String) string with the floors and walls in the room
- */
-  public String displayRoomWallFloor(String display) {
+  private String displayRoomWallFloor(String display) {
     for (int y = 0; y < getHeight(); y++) {
       for (int x = 0; x < getWidth(); x++) {
         if (y == 0 || y == (getHeight() - 1)) {
@@ -218,11 +197,7 @@ location is a number between 0 and the length of the wall
     return display;
   }
 
-/**
- *@param display - display of room
- *@return (String) added the doors to the string
- */
-  public String displayRoomDoor(String display) {
+  private String displayRoomDoor(String display) {
     if (getDoor("S") != -1) {
       display = display.substring(0, (getWidth() + 1) * (getHeight() - 1) + getDoor("S")) + getDisplayCharacter("DOOR") + display.substring((getWidth() + 1) * (getHeight() - 1) + getDoor("S") + 1);
     }
@@ -239,12 +214,7 @@ location is a number between 0 and the length of the wall
     return display;
   }
 
-
-/**
- *@param display - display of room
- *@return (String) added the items to the string
- */
-  public String displayRoomItem(String display) {
+  private String displayRoomItem(String display) {
     int index;
     Point p;
 
@@ -258,22 +228,13 @@ location is a number between 0 and the length of the wall
     return display;
   }
 
-
-/**
- *@param display - display of room
- *@return (String) added player to the String
- */
-  public String displayPlayer(String display) {
+  private String displayPlayer(String display) {
     int index;
     Point p;
 
-    System.out.println("why");
     p = player.getXyLocation();
-    System.out.println(p);
     index = (getWidth() + 1) * (int)(p.getY()) + (int)(p.getX());
-    System.out.println(getWidth());
     display = display.substring(0, index) + player.getDisplayCharacter() + display.substring(index + 1);
-    System.out.println("what");
 
     return display;
   }
