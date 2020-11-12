@@ -87,7 +87,7 @@ public class Room {
 
 /**
  * Gets a list of items that are in the room.
- * @return (ArrayList<Item>) list of items
+ * @return (ArrayList) list of items
  */
   public ArrayList<Item> getRoomItems() {
     return itemList;
@@ -305,7 +305,7 @@ public class Room {
 
 /**
  * Gets the list of doors in this room.
- * @return (HashMap<String, Door>) list of doors and the direction they are at
+ * @return (HashMap) list of doors and the direction they are at
  */
   public HashMap<String, Door> listDoor() {
     return doorList;

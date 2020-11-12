@@ -78,7 +78,7 @@ public class Item {
 
 /**
  * Sets the item's type.
- * @param type
+ * @param type of item
  */
   public void setType(String type) {
     itemType = type;
@@ -94,7 +94,7 @@ public class Item {
 
 /**
  * Sets the display character of the item.
- * @param newDisplayCharacter
+ * @param newDisplayCharacter used to represent item
  */
   public void setDisplayCharacter(Character newDisplayCharacter) {
     ch = newDisplayCharacter;

@@ -141,7 +141,7 @@ public class Rogue {
  * Checks if move is valid, and if not throws an Exception.
  * @param input - the key that the user pressed
  * @return (String) - tells what the user did when pressing the key
- * @throws InvalidMoveExcpetion if input isn't valid
+ * @throws InvalidMoveException if input isn't valid
  */
   public String makeMove(char input) throws InvalidMoveException {
     int x;

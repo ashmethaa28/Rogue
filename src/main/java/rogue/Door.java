@@ -44,7 +44,7 @@ public class Door {
 
 /**
  * Sets the room id which the room the door is connected to.
- * @param roomId
+ * @param roomId - id of the room
  */
   public void setConnectedRoomId(int roomId) {
     connectedRoomId = roomId;
@@ -100,7 +100,7 @@ public class Door {
 
 /**
  * List of rooms that door is connects to.
- * @return (ArrayList<Room>) list of all the rooms that this door is connected to
+ * @return (ArrayList) list of all the rooms that this door is connected to
  */
   public ArrayList<Room> getConnectedRooms() {
     return connectedRooms;

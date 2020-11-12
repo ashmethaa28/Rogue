@@ -23,7 +23,7 @@ public class Player {
 
 /**
  * Constructor.
- * @param name
+ * @param name of user
  */
   public Player(String name) {
     setName(name);
