@@ -17,10 +17,23 @@ public class Door {
   }
 
 /**
- * @param direction
- * @param location
- * @param roomId
  * Constructor.
+ * @param direction of the door
+ * @param location - position on the wall
+ * @param r - room that this door is in
+ */
+  public Door(String direction, int location, Room r) {
+    setDirection(direction);
+    setLocation(location);
+    connectRoom(r);
+  }
+
+/**
+ * Constructor.
+ * @param direction of the door
+ * @param location - position on the wall
+ * @param roomId - room Id of which room this door connects to
+ * @param r - room that this door is in
  */
   public Door(String direction, int location, int roomId, Room r) {
     setDirection(direction);
@@ -30,73 +43,73 @@ public class Door {
   }
 
 /**
+ * Sets the room id which the room the door is connected to.
  * @param roomId
- * sets the room id which the door is connected to
  */
   public void setConnectedRoomId(int roomId) {
     connectedRoomId = roomId;
   }
 
 /**
- * @return (int)
- * gets the room id which the door connects to
+ * Gets the room id which the room the door connects to.
+ * @return (int) value of the room Id that the door connects to
  */
   public int getConnectedRoomId() {
     return connectedRoomId;
   }
 
 /**
- * @param direction
- * sets the direction of the door
+ * Sets the direction of the door.
+ * @param direction where the door is.
  */
   public void setDirection(String direction) {
     roomDirection = direction;
   }
 
 /**
- * @param location
- * sets the location of the door along the wall
+ * Sets the location of the door along the wall.
+ * @param location of where the door is.
  */
   public void setLocation(int location) {
     roomLocation = location;
   }
 
 /**
- * @return (String)
- * gets the direction of the door
+ * Gets the direction of the door.
+ * @return (String) value of which direction the door is.
  */
   public String getDirection() {
     return roomDirection;
   }
 
 /**
- * @return (int)
- * gets the location of the door
+ * Gets the location of the door.
+ * @return (int) where the door is located along the wall
  */
   public int getLocation() {
     return roomLocation;
   }
 
 /**
- * @param r
- * current room that the door is connected to
+ * Current room that the door is connected to.
+ * @param r - the room that the door is in or the door connects to.
  */
   public void connectRoom(Room r) {
     connectedRooms.add(r);
   }
 
 /**
- * @return (ArrayList)
- * list of rooms that door is connected to
+ * List of rooms that door is connects to.
+ * @return (ArrayList<Room>) list of all the rooms that this door is connected to
  */
   public ArrayList<Room> getConnectedRooms() {
     return connectedRooms;
   }
 
 /**
- * @param currentRoom
- * @return (Room)
- * gets other Room that Door connects to
+ * Gets the other room that door is connected to.
+ * @param currentRoom - the room that player is currently in
+ * @return (Room) the other room that the door connects to
  */
   public Room getOtherRoom(Room currentRoom) {
     for (int i = 0; i < connectedRooms.size(); i++) {

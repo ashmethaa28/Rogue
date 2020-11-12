@@ -22,8 +22,8 @@ public class Player {
 
 
 /**
- *@param name
- *Constructor that calls setName method
+ * Constructor.
+ * @param name
  */
   public Player(String name) {
     setName(name);
@@ -32,6 +32,7 @@ public class Player {
   }
 
 /**
+ * Gets name of player.
  * @return (String) the player's name
  */
   public String getName() {
@@ -39,14 +40,15 @@ public class Player {
   }
 
 /**
- * @param newName
- * updates player's name
+ * Sets name of player.
+ * @param newName for player
  */
   public void setName(String newName) {
     playerName = newName;
   }
 
 /**
+ * Gets the location of player.
  * @return (Point) the player's location
  */
   public Point getXyLocation() {
@@ -54,38 +56,40 @@ public class Player {
   }
 
 /**
- * @param newXyLocation
- * updates player's location
+ * Sets the location of player.
+ * @param newXyLocation of player
  */
   public void setXyLocation(Point newXyLocation) {
     p = newXyLocation;
   }
 
 /**
- * @return (Room) a Room object that the player is currently in
+ * Gets room which player is in.
+ * @return (Room) that the player is currently in
  */
   public Room getCurrentRoom() {
     return room;
   }
 
 /**
- * @param newRoom
- * updates the Room object that the player is currently in
+ * Sets the room in which the player is currently in.
+ * @param newRoom player is in
  */
   public void setCurrentRoom(Room newRoom) {
     room = newRoom;
   }
 
 /**
- * @return (Character) a Character value that is used to represent the player
+ * Gets the display character for player.
+ * @return (Character) that is used to represent the player
  */
   public Character getDisplayCharacter() {
     return ch;
   }
 
 /**
- * @param newDisplayCharacter
- * updates the Character value that is used to represent player
+ * Sets display Character.
+ * @param newDisplayCharacter for player
  */
   public void setDisplayCharacter(Character newDisplayCharacter) {
     ch = newDisplayCharacter;

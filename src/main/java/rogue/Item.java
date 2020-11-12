@@ -22,11 +22,11 @@ public class Item {
   }
 
 /**
- *@param id - tells us id of items
- *@param name - tells us the name of items
- *@param type - discription of items
- *@param xyLocation - tells us the location of item
- *Sets the values of itemId, itemName, itemType, and p
+ * Constructor.
+ * @param id of item
+ * @param name of item
+ * @param type of item
+ * @param xyLocation of item
  */
   public Item(int id, String name, String type, Point xyLocation) {
     setId(id);
@@ -37,105 +37,112 @@ public class Item {
 
 // Getters and setters
 /**
- *@return (int) the id of the item
+ * Gets the id of the item.
+ * @return (int) the id of the item
  */
   public int getId() {
     return itemId;
   }
 
 /**
- *@param id
- *updates the item's id
+ * Sets the id of the item.
+ * @param id of item
  */
   public void setId(int id) {
     itemId = id;
   }
 
 /**
- *@return (String) the name of the item
+ * Gets the name of the item.
+ * @return (String) the name of the item
  */
   public String getName() {
     return itemName;
   }
 
 /**
- *@param name
- *updates the item's name
+ * Sets name of item.
+ * @param name of item
  */
   public void setName(String name) {
     itemName = name;
   }
 
 /**
- *@return (String) the item's type
+ * Gets type of item.
+ * @return (String) the item's type
  */
   public String getType() {
     return itemType;
   }
 
 /**
- *@param type
- *updates the item's type
+ * Sets the item's type.
+ * @param type
  */
   public void setType(String type) {
     itemType = type;
   }
 
 /**
- *@return (Character) a Character value that is used to represent an item
+ * Gets the display character of the item.
+ * @return (Character) a Character value that is used to represent an item
  */
   public Character getDisplayCharacter() {
     return ch;
   }
 
 /**
- *@param newDisplayCharacter
- *updates the Character value that is used to represent an item
+ * Sets the display character of the item.
+ * @param newDisplayCharacter
  */
   public void setDisplayCharacter(Character newDisplayCharacter) {
     ch = newDisplayCharacter;
   }
 
 /**
- *@return a description of the item
+ * Gets the description of the item.
+ * @return (String) a description of the item
  */
   public String getDescription() {
     return description;
   }
 
 /**
- *@param newDescription
- *updates the description of an item
+ * Sets the description of an item.
+ * @param newDescription for the item
  */
   public void setDescription(String newDescription) {
     description = newDescription;
   }
 
 /**
- *@return (Point) the items's location
+ * Gets the location of item.
+ * @return (Point) the items's location
  */
   public Point getXyLocation() {
     return p;
   }
 
 /**
- *@param newXyLocation
- *updates the new location of an item
+ * Sets location of item.
+ * @param newXyLocation of item
  */
   public void setXyLocation(Point newXyLocation) {
     p = newXyLocation;
   }
 
 /**
- *@return (Room) the current room in which the item is in
+ * Gets the room which the item is in.
+ * @return (Room) in which the item is in
  */
   public Room getCurrentRoom() {
     return room;
   }
 
 /**
- *@param newCurrentRoom
- *updates the current room the item is in
+ * Sets the room which item is in.
+ * @param newCurrentRoom in which item is in
  */
   public void setCurrentRoom(Room newCurrentRoom) {
     room = newCurrentRoom;
