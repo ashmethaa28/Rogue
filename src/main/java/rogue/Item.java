@@ -28,11 +28,12 @@ public class Item {
  * @param type of item
  * @param xyLocation of item
  */
-  public Item(int id, String name, String type, Point xyLocation) {
+  public Item(int id, String name, String type, Point xyLocation, String des) {
     setId(id);
     setName(name);
     setType(type);
     setXyLocation(xyLocation);
+    setDescription(des);
   }
 
 // Getters and setters

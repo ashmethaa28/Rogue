@@ -11,6 +11,7 @@ public class Rogue {
   private ArrayList<Room> roomList = new ArrayList();
   private ArrayList<Item> itemList = new ArrayList();
   private RogueParser game;
+  private Inventory inventory = new Inventory();
   public static final char DOWN = 's';
   public static final char UP = 'w';
   public static final char LEFT = 'a';
@@ -233,18 +234,44 @@ public class Rogue {
  * @param toAdd - contains information from JSON file about an item
  */
   public void addItem(Map<String, String> toAdd) {
-    Item item = new Item();
-    item.setId(Integer.decode(toAdd.get("id")));
-    item.setName(toAdd.get("name"));
-    item.setType(toAdd.get("type"));
-    item.setDescription(toAdd.get("description"));
-
-    int x = Integer.decode(toAdd.get("x"));
+  	int id = Integer.decode(toAdd.get("id"));
+  	String name = toAdd.get("name");
+  	String type = toAdd.get("type");
+  	String description = toAdd.get("description");
+  	int x = Integer.decode(toAdd.get("x"));
     int y = Integer.decode(toAdd.get("y"));
     Point p = new Point(x, y);
-    item.setXyLocation(p);
 
-    itemList.add(item);
+    if (toAdd.get("type") == "Food") {
+      Food item = new Food(id, name, type, p, description);
+      itemList.add(item);
+    } else if (toAdd.get("type") == "SmallFood") {
+      SmallFood item = new SmallFood(id, name, type, p, description);
+      itemList.add(item);
+    } else if (toAdd.get("type") == "Clothing") {
+      Clothing item = new Clothing(id, name, type, p, description);
+      itemList.add(item);
+    } else if (toAdd.get("type") == "Potion") {
+      Potion item = new Potion(id, name, type, p, description);
+    } else if (toAdd.get("type") == "Ring") {
+      Ring item = new Ring(id, name, type, p, description);
+      itemList.add(item);
+    } else {
+      Item item = new Item(id, name, type, p, description);
+      itemList.add(item);
+    }
+    // Item item = new Item();
+    // item.setId(Integer.decode(toAdd.get("id")));
+    // item.setName(toAdd.get("name"));
+    // item.setType(toAdd.get("type"));
+    // item.setDescription(toAdd.get("description"));
+
+    // int x = Integer.decode(toAdd.get("x"));
+    // int y = Integer.decode(toAdd.get("y"));
+    // Point p = new Point(x, y);
+    // item.setXyLocation(p);
+
+    // itemList.add(item);
   }
 
   private void removeItemInPosition(Point p, ArrayList<Item> itemTempList, int i) {
@@ -254,6 +281,7 @@ public class Rogue {
       x = itemTempList.get(n).getXyLocation().getX();
       y = itemTempList.get(n).getXyLocation().getY();
       if (p.getX() == x && p.getY() == y) {
+        inventory.addItem(itemTempList.get(n));
         roomList.get(i).removeItem(itemTempList.get(n));
       }
     }
