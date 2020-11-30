@@ -1,23 +1,47 @@
 package rogue;
 
 import java.util.ArrayList;
+import java.io.Serializable;
+public class Inventory implements Serializable {
+  private ArrayList<Item> itemList = new ArrayList();
+  private static final long serialVersionUID = -6859226804699537081L;
 
-public class Inventory {
-	public ArrayList<Item> itemList = new ArrayList();
+/**
+ * Default Constructor.
+ */
+  public Inventory() {
+  }
 
-	public Inventory(){
+/**
+ * Constructor.
+ * @param item
+ */
+  public Inventory(Item item) {
+    addItem(item);
+  }
 
-	}
+/**
+ * Gets list of item.
+ * @return (ArrayList) - list of item
+ */
+  public ArrayList<Item> getList() {
+   return itemList;
+  }
 
-	public Inventory(Item item) {
-		addItem(item);
-	}
+/**
+ * Adds item to list of item.
+ * @param item that is being added
+ */
+  public void addItem(Item item) {
+    itemList.add(item);
+  }
 
-	public void addItem(Item item) {
-        itemList.add(item);
-	}
+/**
+ * Removes item from list of item.
+ * @param item that is being removed
+ */
+  public void removeItem(Item item) {
+    itemList.remove(item);
+  }
 
-    public void removeItem(Item item) throws InvalidMoveException {
-//ADD CODE
-    }
 }

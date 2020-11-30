@@ -3,12 +3,14 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  * A room within the dungeon - contains monsters, treasure,
  * doors out, etc.
  */
-public class Room {
+
+public class Room implements Serializable {
 
   private int roomWidth;
   private int roomHeight;
@@ -16,16 +18,15 @@ public class Room {
   private ArrayList<Item> itemList = new ArrayList();
   private HashMap<String, Door> doorList = new HashMap();
   private Player player;
-//  private Character ch;
   private boolean isPlayer;
   private Map<String, Character> displayInfo = new HashMap();
   private Rogue game;
+  private static final long serialVersionUID = -3498751402501629854L;
 
 /**
  *Default constructor.
  */
   public Room() {
-
   }
 
 // Required getter and setters below
@@ -128,6 +129,11 @@ public class Room {
     }
 
     return -1;
+  }
+
+  public void setDoor(String direction, int num) {
+    Door door = new Door(direction, num, this);
+    addDoor(direction, door);
   }
 
 /**
@@ -253,35 +259,13 @@ public class Room {
  * @throws NoSuchItemException if item is present in room but doesn't exist in list of items
  */
   public void addItem(Item toAdd) throws ImpossiblePositionException, NoSuchItemException {
-    double x;
-    double y;
     int check = 0;
 
-    for (int i = 0; i < itemList.size(); i++) {
-      x = (itemList.get(i)).getXyLocation().getX();
-      y = (itemList.get(i)).getXyLocation().getY();
-      if (x == toAdd.getXyLocation().getX() && y == toAdd.getXyLocation().getY()) {
-        check = 1;
-      }
-    }
+    check = sameLocationAsOtherItem(toAdd, check);
 
-    try {
-      if (isPlayer) {
-        x = player.getXyLocation().getX();
-        y = player.getXyLocation().getY();
-        if (x == toAdd.getXyLocation().getX() && y == toAdd.getXyLocation().getY()) {
-          check = 1;
-        }
-      }
-    } catch (NullPointerException e) {
-    }
+    check = sameLocationAsPlayer(toAdd, check);
 
-    if (roomWidth - 1 <= toAdd.getXyLocation().getX() || toAdd.getXyLocation().getX() <= 0) {
-      check = 1;
-    }
-    if (roomHeight - 1 <= toAdd.getXyLocation().getY() || toAdd.getXyLocation().getY() <= 0) {
-      check = 1;
-    }
+    check = itemInRoom(toAdd, check);
 
     if (check == 0) {
       itemList.add(toAdd);
@@ -292,6 +276,45 @@ public class Room {
     if (!(game.containsItem(toAdd))) {
       throw new NoSuchItemException();
     }
+  }
+
+  private int itemInRoom(Item toAdd, int check) {
+    if (roomWidth - 1 <= toAdd.getXyLocation().getX() || toAdd.getXyLocation().getX() <= 0) {
+      return 1;
+    }
+    if (roomHeight - 1 <= toAdd.getXyLocation().getY() || toAdd.getXyLocation().getY() <= 0) {
+      return 1;
+    }
+    return 0;
+  }
+
+  private int sameLocationAsPlayer(Item toAdd, int check) {
+    double x;
+    double y;
+    try {
+      if (isPlayer) {
+        x = player.getXyLocation().getX();
+        y = player.getXyLocation().getY();
+        if (x == toAdd.getXyLocation().getX() && y == toAdd.getXyLocation().getY()) {
+          return 1;
+        }
+      }
+    } catch (NullPointerException e) {
+    }
+    return check;
+  }
+
+  private int sameLocationAsOtherItem(Item toAdd, int check) {
+    double x;
+    double y;
+    for (int i = 0; i < itemList.size(); i++) {
+      x = (itemList.get(i)).getXyLocation().getX();
+      y = (itemList.get(i)).getXyLocation().getY();
+      if (x == toAdd.getXyLocation().getX() && y == toAdd.getXyLocation().getY()) {
+        return 1;
+      }
+    }
+    return check;
   }
 
 /**
@@ -317,48 +340,64 @@ public class Room {
  * @throws NotEnoughDoorsException if there are no doors in the room
  */
   public boolean verifyRoom() throws NotEnoughDoorsException {
-    double x;
-    double y;
     int valid;
     valid = 0;
-    for (int i = 0; i < itemList.size(); i++) {
-      x = (itemList.get(i)).getXyLocation().getX();
-      y = (itemList.get(i)).getXyLocation().getY();
-      if (roomWidth <= x || x <= 0) {
-        valid++;
-      }
-      if (roomHeight <= y || y <= 0) {
-        valid++;
-      }
-    }
 
-    try {
-      x = player.getXyLocation().getX();
-      y = player.getXyLocation().getY();
-      if (roomWidth - 1 <= x || x <= 0) {
-        valid++;
-      }
-      if (roomHeight - 1 <= y || y <= 0) {
-        valid++;
-      }
-    } catch (NullPointerException e) {
-    }
+    valid = valid + validItemLocation() + validPlayerLocation();
 
     if (doorList.size() == 0) {
       throw new NotEnoughDoorsException();
     }
 
-    for (String direction: doorList.keySet()) {
-      int temp = (doorList.get(direction)).getConnectedRooms().size();
-      if (temp != 2) {
-        valid++;
-      }
-    }
+    valid = valid + validDoors();
 
     if (valid == 0) {
       return true;
     }
-     return false;
+    return false;
+  }
+
+  private int validDoors() {
+    for (String direction: doorList.keySet()) {
+      int temp = (doorList.get(direction)).getConnectedRooms().size();
+      if (temp != 2) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  private int validPlayerLocation() {
+    double x;
+    double y;
+    try {
+      x = player.getXyLocation().getX();
+      y = player.getXyLocation().getY();
+      if (roomWidth - 1 <= x || x <= 0) {
+        return 1;
+      }
+      if (roomHeight - 1 <= y || y <= 0) {
+        return 1;
+      }
+    } catch (NullPointerException e) {
+    }
+    return 0;
+  }
+
+  private int validItemLocation() {
+    double x;
+    double y;
+    for (int i = 0; i < itemList.size(); i++) {
+      x = (itemList.get(i)).getXyLocation().getX();
+      y = (itemList.get(i)).getXyLocation().getY();
+      if (roomWidth <= x || x <= 0) {
+        return 1;
+      }
+      if (roomHeight <= y || y <= 0) {
+        return 1;
+      }
+    }
+    return 0;
   }
 
 /**

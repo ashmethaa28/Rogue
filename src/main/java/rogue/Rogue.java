@@ -5,18 +5,22 @@ import java.util.Map;
 import java.util.HashMap;
 import java.awt.Point;
 
-public class Rogue {
+import java.io.Serializable;
+
+public class Rogue implements Serializable {
 
   private Player roguePlayer;
   private ArrayList<Room> roomList = new ArrayList();
   private ArrayList<Item> itemList = new ArrayList();
   private RogueParser game;
-  private Inventory inventory = new Inventory();
+  private Inventory inventory;
   public static final char DOWN = 's';
   public static final char UP = 'w';
   public static final char LEFT = 'a';
   public static final char RIGHT = 'd';
   private static final int MAXDOOR = 4;
+
+  private static final long serialVersionUID = -4179660682717886712L;
 
 /**
  * Constructor.
@@ -29,8 +33,16 @@ public class Rogue {
  * @param theGame - RoguePaser object used to extract information from file
  */
   public Rogue(RogueParser theGame) {
-    game = theGame;
+    setRogueParser(theGame);
     createRooms();
+  }
+
+/**
+ * Sets the Rogue Parser.
+ * @param theGame the rogue parser that needs setting
+ */
+  public void setRogueParser(RogueParser theGame) {
+    game = theGame;
   }
 
 /**
@@ -43,6 +55,7 @@ public class Rogue {
     for (int i = 0; i < roomList.size(); i++) {
       roomList.get(i).setPlayer(roguePlayer);
     }
+    setInventory();
   }
 
   private void setSymbols() {
@@ -62,6 +75,14 @@ public class Rogue {
       }
     } catch (NullPointerException e) {
     }
+  }
+
+/**
+ * Gets inventory.
+ * @return (Inventory) players inventory
+ */
+  public Inventory getInventory() {
+    return inventory;
   }
 
 /**
@@ -87,7 +108,10 @@ public class Rogue {
     return roguePlayer;
   }
 
-  private void createRooms() {
+/**
+ * Creates Rooms.
+ */
+  public void createRooms() {
     Map<String, String> roomMap = new HashMap();
     Map<String, String> itemMap = new HashMap();
 
@@ -200,29 +224,32 @@ public class Rogue {
  */
   public void addRoom(Map<String, String> toAdd) {
     Room room = new Room();
-    room.setWidth(Integer.decode(toAdd.get("width")));
-    room.setHeight(Integer.decode(toAdd.get("height")));
-    room.setId(Integer.decode(toAdd.get("id")));
-    if (toAdd.get("start") == "true") {
-      room.setPlayerInRoom(true);
-    } else {
-      room.setPlayerInRoom(false);
-    }
-    if (Integer.decode(toAdd.get("N")) != -1) {
-      Door door = new Door("N", Integer.decode(toAdd.get("N")), Integer.decode(toAdd.get("Ncon")), room);
-      room.addDoor("N", door);
-    }
-    if (Integer.decode(toAdd.get("S")) != -1) {
-      Door door = new Door("S", Integer.decode(toAdd.get("S")), Integer.decode(toAdd.get("Scon")), room);
-      room.addDoor("S", door);
-    }
-    if (Integer.decode(toAdd.get("W")) != -1) {
-      Door door = new Door("W", Integer.decode(toAdd.get("W")), Integer.decode(toAdd.get("Wcon")), room);
-      room.addDoor("W", door);
-    }
-    if (Integer.decode(toAdd.get("E")) != -1) {
-      Door door = new Door("E", Integer.decode(toAdd.get("E")), Integer.decode(toAdd.get("Econ")), room);
-      room.addDoor("E", door);
+    try {
+      room.setWidth(Integer.decode(toAdd.get("width")));
+      room.setHeight(Integer.decode(toAdd.get("height")));
+      room.setId(Integer.decode(toAdd.get("id")));
+      if (toAdd.get("start") == "true") {
+        room.setPlayerInRoom(true);
+      } else {
+        room.setPlayerInRoom(false);
+      }
+      if (Integer.decode(toAdd.get("N")) != -1) {
+        Door door = new Door("N", Integer.decode(toAdd.get("N")), Integer.decode(toAdd.get("Ncon")), room);
+        room.addDoor("N", door);
+      }
+      if (Integer.decode(toAdd.get("S")) != -1) {
+        Door door = new Door("S", Integer.decode(toAdd.get("S")), Integer.decode(toAdd.get("Scon")), room);
+        room.addDoor("S", door);
+      }
+      if (Integer.decode(toAdd.get("W")) != -1) {
+        Door door = new Door("W", Integer.decode(toAdd.get("W")), Integer.decode(toAdd.get("Wcon")), room);
+        room.addDoor("W", door);
+      }
+      if (Integer.decode(toAdd.get("E")) != -1) {
+        Door door = new Door("E", Integer.decode(toAdd.get("E")), Integer.decode(toAdd.get("Econ")), room);
+        room.addDoor("E", door);
+      }
+    } catch (NullPointerException e) {
     }
 
     room.setGame(this);
@@ -230,48 +257,43 @@ public class Rogue {
   }
 
 /**
+ * Sets inventory.
+ */
+  public void setInventory() {
+    inventory = new Inventory();
+  }
+
+/**
  * Extracts information from toAdd and creates Items.
  * @param toAdd - contains information from JSON file about an item
  */
   public void addItem(Map<String, String> toAdd) {
-  	int id = Integer.decode(toAdd.get("id"));
-  	String name = toAdd.get("name");
-  	String type = toAdd.get("type");
-  	String description = toAdd.get("description");
-  	int x = Integer.decode(toAdd.get("x"));
+    int id = Integer.decode(toAdd.get("id"));
+    String name = toAdd.get("name");
+    String type = toAdd.get("type");
+    String description = toAdd.get("description");
+    int x = Integer.decode(toAdd.get("x"));
     int y = Integer.decode(toAdd.get("y"));
     Point p = new Point(x, y);
+    Item item = null;
 
-    if (toAdd.get("type") == "Food") {
-      Food item = new Food(id, name, type, p, description);
-      itemList.add(item);
-    } else if (toAdd.get("type") == "SmallFood") {
-      SmallFood item = new SmallFood(id, name, type, p, description);
-      itemList.add(item);
-    } else if (toAdd.get("type") == "Clothing") {
-      Clothing item = new Clothing(id, name, type, p, description);
-      itemList.add(item);
-    } else if (toAdd.get("type") == "Potion") {
-      Potion item = new Potion(id, name, type, p, description);
-    } else if (toAdd.get("type") == "Ring") {
-      Ring item = new Ring(id, name, type, p, description);
-      itemList.add(item);
+    if (type.equals("Food")) {
+      item = new Food(id, name, type, p, description);
+    } else if (type.equals("SmallFood")) {
+      item = new SmallFood(id, name, type, p, description);
+    } else if (type.equals("Clothing")) {
+      item = new Clothing(id, name, type, p, description);
+    } else if (type.equals("Potion")) {
+      item = new Potion(id, name, type, p, description);
+      item.getToss();
+    } else if (type.equals("Ring")) {
+      item = new Ring(id, name, type, p, description);
+    } else if (type.equals("Magic")) {
+      item = new Magic(id, name, type, p, description);
     } else {
-      Item item = new Item(id, name, type, p, description);
-      itemList.add(item);
+      item = new Item(id, name, type, p, description);
     }
-    // Item item = new Item();
-    // item.setId(Integer.decode(toAdd.get("id")));
-    // item.setName(toAdd.get("name"));
-    // item.setType(toAdd.get("type"));
-    // item.setDescription(toAdd.get("description"));
-
-    // int x = Integer.decode(toAdd.get("x"));
-    // int y = Integer.decode(toAdd.get("y"));
-    // Point p = new Point(x, y);
-    // item.setXyLocation(p);
-
-    // itemList.add(item);
+    itemList.add(item);
   }
 
   private void removeItemInPosition(Point p, ArrayList<Item> itemTempList, int i) {
@@ -490,6 +512,20 @@ public class Rogue {
       }
     }
     return false;
+  }
+
+/**
+ * Remove roomList.
+ */
+  public void removeRoomList() {
+    roomList.clear();
+  }
+
+/**
+ * Remove itemList.
+ */
+  public void removeItemList() {
+    itemList.clear();
   }
 
   private Point moveObjectToValidPosition(int n, Point p) {

@@ -110,33 +110,15 @@ public class RogueParser {
     private void parse(String filename) {
 
         JSONParser parser = new JSONParser();
-        JSONObject roomsJSON;
-        JSONObject symbolsJSON;
 
         try {
             Object obj = parser.parse(new FileReader(filename));
             JSONObject configurationJSON = (JSONObject) obj;
 
-            // Extract the Rooms value from the file to get the file location for rooms
-            String roomsFileLocation = (String) configurationJSON.get("Rooms");
-
-            // Extract the Symbols value from the file to get the file location for symbols-map
-            String symbolsFileLocation = (String) configurationJSON.get("Symbols");
-
-            Object roomsObj = parser.parse(new FileReader(roomsFileLocation));
-            roomsJSON = (JSONObject) roomsObj;
-
-            Object symbolsObj = parser.parse(new FileReader(symbolsFileLocation));
-            symbolsJSON = (JSONObject) symbolsObj;
-
-
-            extractRoomInfo(roomsJSON);
-            extractItemInfo(roomsJSON);
-            extractSymbolInfo(symbolsJSON);
+            jsonObject(configurationJSON);
 
             roomIterator = rooms.iterator();
             itemIterator = items.iterator();
-
         } catch (FileNotFoundException e) {
             System.out.println("Cannot find file named: " + filename);
         } catch (IOException e) {
@@ -144,7 +126,66 @@ public class RogueParser {
         } catch (ParseException e) {
             System.out.println("Error parsing JSON file");
         }
+    }
 
+    private void jsonObject(JSONObject configurationJSON) {
+        try {
+            JSONParser parser = new JSONParser();
+            String roomsFileLocation = (String) configurationJSON.get("Rooms");
+            String symbolsFileLocation = (String) configurationJSON.get("Symbols");
+
+            Object roomsObj = parser.parse(new FileReader(roomsFileLocation));
+            JSONObject roomsJSON = (JSONObject) roomsObj;
+            Object symbolsObj = parser.parse(new FileReader(symbolsFileLocation));
+            JSONObject symbolsJSON = (JSONObject) symbolsObj;
+
+            extractInfo(roomsJSON, symbolsJSON);
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot find file");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            System.out.println("Error parsing JSON file");
+        }
+    }
+
+    private void extractInfo(JSONObject roomsJSON, JSONObject symbolsJSON) {
+        extractRoomInfo(roomsJSON);
+        extractItemInfo(roomsJSON);
+        extractSymbolInfo(symbolsJSON);
+    }
+
+/**
+ * Prases for room.
+ * @param filename - file that is being prased through for the rooms
+ */
+    public void roomParser(String filename) {
+        clear();
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object roomsObj = parser.parse(new FileReader(filename));
+            JSONObject roomsJSON = (JSONObject) roomsObj;
+            extractRoomInfo(roomsJSON);
+            extractItemInfo(roomsJSON);
+            roomIterator = rooms.iterator();
+            itemIterator = items.iterator();
+        } catch (ParseException e) {
+            System.out.println("Error parsing JSON file");
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot find file named: " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clear() {
+        roomIterator = null;
+        itemIterator = null;
+
+        rooms.clear();
+        items.clear();
+        itemLocations.clear();
     }
 
     /**
@@ -193,20 +234,8 @@ public class RogueParser {
         room.put("width", roomJSON.get("width").toString());
 
         // Cheap way of making sure all 4 directions have a sentinel value in the map
-        room.put("E", "-1");
-        room.put("N", "-1");
-        room.put("S", "-1");
-        room.put("W", "-1");
-
         // Update the map with any doors in the room
-        JSONArray doorArray = (JSONArray) roomJSON.get("doors");
-        for (int j = 0; j < doorArray.size(); j++) {
-            JSONObject doorObj = (JSONObject) doorArray.get(j);
-            String dir = String.valueOf(doorObj.get("dir"));
-            room.replace(dir, doorObj.get("wall_pos").toString()); //MY CODE
-            String dircon = dir + "con"; //MY CODE
-            room.put(dircon, doorObj.get("con_room").toString()); //MY CODE
-        }
+        doors(roomJSON, room);
 
         JSONArray lootArray = (JSONArray) roomJSON.get("loot");
         // Loop through each item and update the hashmap
@@ -215,6 +244,22 @@ public class RogueParser {
         }
 
         return room;
+    }
+
+    private void doors(JSONObject roomJSON, HashMap<String, String> room) {
+        room.put("E", "-1");
+        room.put("N", "-1");
+        room.put("S", "-1");
+        room.put("W", "-1");
+
+        JSONArray doorArray = (JSONArray) roomJSON.get("doors");
+        for (int j = 0; j < doorArray.size(); j++) {
+            JSONObject doorObj = (JSONObject) doorArray.get(j);
+            String dir = String.valueOf(doorObj.get("dir"));
+            room.replace(dir, doorObj.get("wall_pos").toString()); //MY CODE
+            String dircon = dir + "con"; //MY CODE
+            room.put(dircon, doorObj.get("con_room").toString()); //MY CODE
+        }
     }
 
     /**
@@ -262,6 +307,13 @@ public class RogueParser {
         item.put("type", itemsJSON.get("type").toString());
         item.put("description", itemsJSON.get("description").toString());
 
+        itemLocationConfirmed(item);
+
+        return item;
+
+    }
+
+    private void itemLocationConfirmed(HashMap<String, String> item) {
         for (Map<String, String> itemLocation : itemLocations) {
             if (itemLocation.get("id").toString().equals(item.get("id").toString())) {
                 item.put("room", itemLocation.get("room"));
@@ -269,11 +321,7 @@ public class RogueParser {
                 item.put("y", itemLocation.get("y"));
                 break;
             }
-
         }
-
-        return item;
-
     }
 
 }

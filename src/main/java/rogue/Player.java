@@ -1,16 +1,19 @@
 package rogue;
 
 import java.awt.Point;
+
+import java.io.Serializable;
 /**
  * The player character.
  */
-public class Player {
+public class Player implements Serializable {
 
   private String playerName;
   private Room room;
   private Character ch;
   private Point p;
 
+  private static final long serialVersionUID = -4237973820283286163L;
 /**
  * Default constructor.
  */

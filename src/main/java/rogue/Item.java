@@ -1,11 +1,11 @@
 package rogue;
 
 import java.awt.Point;
-
+import java.io.Serializable;
 /**
  * A basic Item class; basic functionality for both consumables and equipment.
  */
-public class Item {
+public class Item implements Serializable {
 
   private int itemId;
   private String itemName;
@@ -14,6 +14,10 @@ public class Item {
   private String description;
   private Character ch;
   private Point p;
+  private boolean wearable = false;
+  private boolean tossable = false;
+  private boolean edible = false;
+  private static final long serialVersionUID = 1377278047334935732L;
 
 /**
  * Default constructor.
@@ -27,6 +31,7 @@ public class Item {
  * @param name of item
  * @param type of item
  * @param xyLocation of item
+ * @param des description of item
  */
   public Item(int id, String name, String type, Point xyLocation, String des) {
     setId(id);
@@ -147,6 +152,30 @@ public class Item {
  */
   public void setCurrentRoom(Room newCurrentRoom) {
     room = newCurrentRoom;
+  }
+
+  protected void setWear(boolean verify) {
+    wearable = verify;
+  }
+
+  protected boolean getWear() {
+    return wearable;
+  }
+
+  protected void setToss(boolean verify) {
+    tossable = verify;
+  }
+
+  protected boolean getToss() {
+    return tossable;
+  }
+
+  protected void setEat(boolean verify) {
+    edible = verify;
+  }
+
+  protected boolean getEat() {
+    return edible;
   }
 
 }
